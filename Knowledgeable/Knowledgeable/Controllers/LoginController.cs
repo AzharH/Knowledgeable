@@ -16,12 +16,60 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         // GET: Login
-        public ActionResult Login()
+        
+        public ActionResult Register()
         {
             return View();
         }
 
-        public ActionResult Register()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(UserRegModel register)
+        {
+            if (ModelState.IsValid)
+            {
+
+                User user = new Knowledgeable.User();
+                user = db.Users.Where(x => x.Email == register.Email).FirstOrDefault();
+                if(user == null)
+                {
+                    user = new User();
+                    user.UserID = Guid.NewGuid();
+                    user.Email = register.Email;
+
+
+
+                    user.Name = register.Name;
+                    user.Surname = register.Surname;
+
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt(4);
+                    string hashed1 = BCrypt.Net.BCrypt.HashPassword(register.Password, salt);
+                    string hashed2 = BCrypt.Net.BCrypt.HashPassword(register.Password, hashed1);
+
+
+                    user.Salt = salt;
+                    user.Password = hashed2;
+
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return RedirectToAction("Login");
+
+                }
+                else
+                {
+                    ViewBag.Error = "Email already exists.";
+                    return View();
+
+                }
+
+
+
+            }
+            return View();
+        }
+
+
+        public ActionResult Login()
         {
             return View();
         }
@@ -34,7 +82,8 @@ namespace Knowledgeable.Controllers
             if (ModelState.IsValid)
             {
                 User user = db.Users.Where(x => x.Email == login.Email).FirstOrDefault();
-                if(user != null)
+
+                if (user != null)
                 {
 
                     string hashed1 = BCrypt.Net.BCrypt.HashPassword(login.Password, user.Salt);
@@ -113,7 +162,7 @@ namespace Knowledgeable.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserID,Email,Password,Name,Surname")] User user)
+        public ActionResult Edit(User user)
         {
             if (ModelState.IsValid)
             {

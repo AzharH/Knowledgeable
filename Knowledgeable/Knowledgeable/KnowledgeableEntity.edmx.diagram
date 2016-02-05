@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="KnowledgeableDBModel.Comment" Width="1.5" PointX="3.5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="KnowledgeableDBModel.Share" Width="1.5" PointX="8" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="KnowledgeableDBModel.SubComment" Width="1.5" PointX="5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="KnowledgeableDBModel.User" Width="1.5" PointX="9.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KnowledgeableDBModel.User" Width="1.5" PointX="9.5" PointY="0.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
