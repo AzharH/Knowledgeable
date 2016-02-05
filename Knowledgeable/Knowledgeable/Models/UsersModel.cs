@@ -22,6 +22,8 @@ namespace Knowledgeable.Models
         public string Name { get; set; }
         [Required]
         public string Surname { get; set; }
+
+        public bool Active { get; set; }
     }
 
     public class LoginModel

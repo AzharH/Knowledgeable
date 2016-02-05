@@ -49,6 +49,7 @@ namespace Knowledgeable.Controllers
 
                     user.Salt = salt;
                     user.Password = hashed2;
+                    user.Active = false;
 
                     db.Users.Add(user);
                     db.SaveChanges();
@@ -61,8 +62,6 @@ namespace Knowledgeable.Controllers
                     return View();
 
                 }
-
-
 
             }
             return View();
