@@ -24,7 +24,7 @@ namespace Knowledgeable.Models
             MailContent = welcome + MailContent;
 
 
-            SmtpClient client = new SmtpClient("smtp.office365.com");
+            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
 
             client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
