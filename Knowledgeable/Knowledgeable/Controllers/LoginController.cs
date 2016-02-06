@@ -81,18 +81,20 @@ namespace Knowledgeable.Controllers
             if (ModelState.IsValid)
             {
                 User user = db.Users.Where(x => x.Email == login.Email).FirstOrDefault();
-
-                if (user != null)
+                if (user.Active)
                 {
-
-                    string hashed1 = BCrypt.Net.BCrypt.HashPassword(login.Password, user.Salt);
-                    string hashed2 = BCrypt.Net.BCrypt.HashPassword(login.Password, hashed1);
-
-                    if (hashed2 == user.Password)
+                    if (user != null)
                     {
 
-                        return RedirectToAction("");
+                        string hashed1 = BCrypt.Net.BCrypt.HashPassword(login.Password, user.Salt);
+                        string hashed2 = BCrypt.Net.BCrypt.HashPassword(login.Password, hashed1);
 
+                        if (hashed2 == user.Password)
+                        {
+
+                            return RedirectToAction("");
+
+                        }
                     }
                 }
             }
@@ -100,7 +102,95 @@ namespace Knowledgeable.Controllers
             return View(login);
         }
 
+        public ActionResult Reset()
+        {
+            return View();
+        }
 
+
+        public ActionResult Reset(ResetModel resetModel)
+        {
+
+            User user = db.Users.Where(x => x.Email == resetModel.Email).FirstOrDefault();
+            if(user != null)
+            {
+
+                ResetPassword resetPassword = db.ResetPasswords.Find(user.UserID);
+                if(resetPassword == null)
+                {
+                    resetPassword = new ResetPassword();
+                    resetPassword.UserID = user.UserID;
+                    resetPassword.ResetID = Guid.NewGuid();
+                    db.ResetPasswords.Add(resetPassword);
+                }
+                else
+                {
+                    resetPassword.ResetID = Guid.NewGuid();
+                    db.Entry(resetPassword).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+
+                string name = user.Name;
+                string Subject = "Password reset";
+                string mailContent = "<p>Your password was requested to be reset. Click on the link below to reset your password.</p> <a href=\"http://localhost:23060/resetpassword/" + resetPassword + "\"></a>";
+
+                Utility.SendMail(name, user.Email, Subject, mailContent);
+            }
+            else
+            {
+                ViewBag.error = "Email does not exists.";
+                return View();
+            }
+
+
+
+
+
+            return View();
+        }
+
+        public ActionResult ResetPassword(Guid resetPasswordID)
+        {
+
+            ResetPassword resetPassword = db.ResetPasswords.Where(x => x.ResetID == resetPasswordID).FirstOrDefault();
+            if(resetPassword != null)
+            {
+                User user = db.Users.Find(resetPassword.UserID);
+                UserRegModel userRegModel = new UserRegModel();
+                userRegModel.UserID = user.UserID;
+                userRegModel.Email = user.Email;
+                return View(userRegModel);
+            }
+            else
+            {
+                return RedirectToAction("Register");
+            }
+
+        }
+
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ResetPassword(UserRegModel userRegModel)
+        {
+
+
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(4);
+            string hashed1 = BCrypt.Net.BCrypt.HashPassword(userRegModel.Password, salt);
+            string hashed2 = BCrypt.Net.BCrypt.HashPassword(userRegModel.Password, hashed1);
+
+            User user = db.Users.Find(userRegModel.UserID);
+            user.Password = hashed2;
+            user.Salt = salt;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            ResetPassword resetPassword = db.ResetPasswords.Find(user.UserID);
+            db.ResetPasswords.Remove(resetPassword);
+            db.SaveChanges();
+
+            return RedirectToAction("Login");
+        }
 
         // GET: Login/Details/5
         public ActionResult Details(Guid? id)

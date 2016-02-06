@@ -78,6 +78,13 @@
           <Property Name="Surname" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="ResetPassword">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ResetID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="KnowledgeableDBModelStoreContainer">
           <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
@@ -86,6 +93,7 @@
           <EntitySet Name="Share" EntityType="Self.Share" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubComment" EntityType="Self.SubComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" Schema="Knowledgeable" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -160,6 +168,7 @@
           <EntitySet Name="Shares" EntityType="Self.Share" />
           <EntitySet Name="SubComments" EntityType="Self.SubComment" />
           <EntitySet Name="Users" EntityType="KnowledgeableDBModel.User" />
+          <EntitySet Name="ResetPasswords" EntityType="KnowledgeableDBModel.ResetPassword" />
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -172,6 +181,13 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Surname" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResetPassword">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="ResetID" Type="Guid" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -255,6 +271,14 @@
                 <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResetPasswords">
+            <EntityTypeMapping TypeName="KnowledgeableDBModel.ResetPassword">
+              <MappingFragment StoreEntitySet="ResetPassword">
+                <ScalarProperty Name="ResetID" ColumnName="ResetID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>

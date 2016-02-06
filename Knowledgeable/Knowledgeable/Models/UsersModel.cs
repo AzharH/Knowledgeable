@@ -37,7 +37,7 @@ namespace Knowledgeable.Models
         public string Password { get; set; }
     }
 
-public class UserRegModel
+    public class UserRegModel
     {
         public System.Guid UserID { get; set; }
 
@@ -63,4 +63,6 @@ public class UserRegModel
         [Compare("Password", ErrorMessage = "Password does not match")]
         public string ConfirmPassword { get; set; }
     }
+
+
 }

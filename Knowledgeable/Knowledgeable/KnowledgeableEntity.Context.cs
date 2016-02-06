@@ -32,5 +32,6 @@ namespace Knowledgeable
         public virtual DbSet<Share> Shares { get; set; }
         public virtual DbSet<SubComment> SubComments { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<ResetPassword> ResetPasswords { get; set; }
     }
 }
