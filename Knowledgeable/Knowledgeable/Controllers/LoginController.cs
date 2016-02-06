@@ -16,7 +16,10 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         // GET: Register
-        
+        public ActionResult Index()
+        {
+            return View(db.Users.ToList());
+        }
         public ActionResult Register()
         {
             return View();
@@ -55,14 +58,15 @@ namespace Knowledgeable.Controllers
 
                     db.Users.Add(user);
                     db.SaveChanges();
-                    return RedirectToAction("ConfirmEmail");
+                    
 
                     string name = register.Name;
                     string Subject = "Email Confirmation";
-                    string mailContent = "<p>Thank you for your registration. Click on the link below to confirm your account.</p> <a href=\"http://localhost:23060/ConfirmEmail/" + user.UserID + "\"></a>";
-
+                    string mailContent = "<p>Thank you for your registration. Click on the link below to confirm your account.</p> <a href=\"http://localhost:23060/Login/EmailConfirmed/" + user.UserID + "\">Click Here</a>";
 
                     Utility.SendMail(name, user.Email, Subject, mailContent);
+
+                    return RedirectToAction("ConfirmEmail");
 
 
                 }
@@ -76,6 +80,14 @@ namespace Knowledgeable.Controllers
             }
             return View();
         }
+
+
+        public ActionResult ConfirmEmail()
+        {
+
+            return View();
+        }
+
 
         // GET: Login
 
@@ -144,7 +156,7 @@ namespace Knowledgeable.Controllers
 
                 string name = user.Name;
                 string Subject = "Password reset";
-                string mailContent = "<p>Your password was requested to be reset. Click on the link below to reset your password.</p> <a href=\"http://localhost:23060/resetpassword/" + resetPassword + "\"></a>";
+                string mailContent = "<p>Your password was requested to be reset. Click on the link below to reset your password.</p> <a href=\"http://localhost:23060/resetpassword/" + resetPassword.ResetID + "\"></a>";
 
                 Utility.SendMail(name, user.Email, Subject, mailContent);
             }
@@ -157,15 +169,16 @@ namespace Knowledgeable.Controllers
             return View();
         }
 
-        public ActionResult EmailConfirmed(Guid UserID)
+
+        public ActionResult EmailConfirmed(Guid? id)
         {
-            if (UserID == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
-                User user = db.Users.Find(UserID);
+                User user = db.Users.Find(id);
                 if(user != null)
                 {
                     user.Active = true;
@@ -181,10 +194,13 @@ namespace Knowledgeable.Controllers
             }
         }
 
-        public ActionResult ResetPassword(Guid resetPasswordID)
+        public ActionResult ResetPassword(Guid? id)
         {
-
-            ResetPassword resetPassword = db.ResetPasswords.Where(x => x.ResetID == resetPasswordID).FirstOrDefault();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ResetPassword resetPassword = db.ResetPasswords.Where(x => x.ResetID == id).FirstOrDefault();
             if(resetPassword != null)
             {
                 User user = db.Users.Find(resetPassword.UserID);
@@ -293,6 +309,8 @@ namespace Knowledgeable.Controllers
             }
             return View(user);
         }
+
+
 
         // GET: Login/Delete/5
         public ActionResult Delete(Guid? id)
