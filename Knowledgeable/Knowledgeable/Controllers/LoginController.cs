@@ -53,7 +53,9 @@ namespace Knowledgeable.Controllers
 
                     db.Users.Add(user);
                     db.SaveChanges();
-                    return RedirectToAction("Login");
+                    return RedirectToAction("ConfirmEmail");
+
+
 
                 }
                 else
