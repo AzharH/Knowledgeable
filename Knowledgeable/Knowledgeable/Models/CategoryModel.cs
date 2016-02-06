@@ -11,5 +11,6 @@ namespace Knowledgeable.Models
         public System.Guid UserID { get; set; }
         public string Name { get; set; }
         public System.Guid ColourID { get; set; }
+        public string Hex { get; set; }
     }
 }

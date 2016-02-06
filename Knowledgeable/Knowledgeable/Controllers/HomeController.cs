@@ -10,6 +10,11 @@ namespace Knowledgeable.Controllers
     {
         public ActionResult Index()
         {
+
+
+            List<Category> listCategory = new List<Category>();
+
+
             return View();
         }
 
