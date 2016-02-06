@@ -15,12 +15,14 @@ namespace Knowledgeable.Controllers
     {
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
-        // GET: Login
+        // GET: Register
         
         public ActionResult Register()
         {
             return View();
         }
+
+        // POST: Register
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -55,6 +57,12 @@ namespace Knowledgeable.Controllers
                     db.SaveChanges();
                     return RedirectToAction("ConfirmEmail");
 
+                    string name = register.Name;
+                    string Subject = "Email Confirmation";
+                    string mailContent = "<p>Thank you for your registration. Click on the link below to confirm your account.</p> <a href=\"http://localhost:23060/ConfirmEmail/" + user.UserID + "\"></a>";
+
+
+                    Utility.SendMail(name, user.Email, Subject, mailContent);
 
 
                 }
@@ -69,12 +77,14 @@ namespace Knowledgeable.Controllers
             return View();
         }
 
+        // GET: Login
 
         public ActionResult Login()
         {
             return View();
         }
 
+        // POST: Login
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -114,11 +124,11 @@ namespace Knowledgeable.Controllers
         {
 
             User user = db.Users.Where(x => x.Email == resetModel.Email).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
 
                 ResetPassword resetPassword = db.ResetPasswords.Find(user.UserID);
-                if(resetPassword == null)
+                if (resetPassword == null)
                 {
                     resetPassword = new ResetPassword();
                     resetPassword.UserID = user.UserID;
@@ -144,11 +154,31 @@ namespace Knowledgeable.Controllers
                 return View();
             }
 
-
-
-
-
             return View();
+        }
+
+        public ActionResult EmailConfirmed(Guid UserID)
+        {
+            if (UserID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                User user = db.Users.Find(UserID);
+                if(user != null)
+                {
+                    user.Active = true;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return View("");
+                }
+                else
+                {
+                    return RedirectToAction("Register");
+                }
+                
+            }
         }
 
         public ActionResult ResetPassword(Guid resetPasswordID)
