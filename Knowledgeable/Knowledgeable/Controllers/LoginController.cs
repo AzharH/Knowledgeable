@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Knowledgeable;
 using Knowledgeable.Models;
+using System.Web.Security;
 
 namespace Knowledgeable.Controllers
 {
@@ -100,7 +101,7 @@ namespace Knowledgeable.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult Login(LoginModel login)
+        public ActionResult Login(LoginModel login, string ReturnUrl = "")
         {
             if (ModelState.IsValid)
             {
@@ -115,15 +116,30 @@ namespace Knowledgeable.Controllers
 
                         if (hashed2 == user.Password)
                         {
-
-                            return RedirectToAction("");
-
+                            FormsAuthentication.SetAuthCookie(user.Name, login.RememberMe);
+                            Session["UserID"] = user.UserID;
+                            if (Url.IsLocalUrl(ReturnUrl))
+                            {
+                                return Redirect(ReturnUrl);
+                            }
+                            else
+                            {
+                                return RedirectToAction("Home","Index");
+                            }
                         }
                     }
                 }
             }
-            login.Password = "";//redirect to main page
+            ModelState.Remove("Password");
             return View(login);
+        }
+
+
+        [Authorize]
+        public ActionResult LogOff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
 
         [AllowAnonymous]
