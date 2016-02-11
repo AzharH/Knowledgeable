@@ -12,8 +12,8 @@ namespace Knowledgeable.Models
 
         public static void SendMail(string name, string To, string Subject, string MailContent)
         {
-            string _sender = "email";
-            string _password = "password";
+            string _sender = "knowledgeable2016@outlook.com";
+            string _password = "abcde12345";
             //easbzfarmpywfwds";
 
             string recipient = To;
