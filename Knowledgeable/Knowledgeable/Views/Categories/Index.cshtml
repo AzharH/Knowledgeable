@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<style>
+    #CategoryContainer{
+        width:75%;
+        margin-left:12%;
+        margin-right:12%;
+        height: 500px;
+        background-color: #ebebeb;
+        overflow-x:auto;
+    }
+</style>
+
+<div id="CategoryContainer"></div>
+
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+    $.ajax({
+        type: "GET",
+        url: '/Categories/LoadCategory',
+        data: {},
+        processdata: true,
+        cache: false,
+        contentType: "application/html",
+        dataType: "html",
+        success: function (data) {
+            //var JsonObj = $.parseJSON(data);
+            $("#CategoryContainer").html(data);
+        },
+        error: function () {
+            alert("Error");
+        },
+    });
+
+
+</script>

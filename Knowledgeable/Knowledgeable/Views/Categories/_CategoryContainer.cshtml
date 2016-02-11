@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Knowledgeable.Models.CategoryModel>
+
+<style>
+    .category{
+        width:23%;
+        height: 100px;
+        float:left;
+        margin:1%;
+        color:white;
+    }
+    .category p{
+        text-align:center;
+        height: 30%;
+        margin-top:20%;
+        font-size: 25px;
+    }
+</style>
+
+@foreach (var item in Model){
+    <div class="category" style="background-color:#@item.Hex">
+        <p>
+            @item.Name
+        </p>
+    </div>
+}

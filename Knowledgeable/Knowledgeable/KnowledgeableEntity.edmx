@@ -32,7 +32,7 @@
           </Key>
           <Property Name="ColourID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ColourName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Hex" Type="varbinary" MaxLength="7" Nullable="false" />
+          <Property Name="Hex" Type="varchar" MaxLength="7" Nullable="false" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -45,6 +45,13 @@
           <Property Name="DatePosted" Type="datetime" Nullable="false" />
           <Property Name="UpVote" Type="int" Nullable="false" />
           <Property Name="DownVote" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResetPassword">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ResetID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Share">
           <Key>
@@ -78,22 +85,15 @@
           <Property Name="Surname" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="ResetPassword">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ResetID" Type="uniqueidentifier" Nullable="false" />
-        </EntityType>
         <EntityContainer Name="KnowledgeableDBModelStoreContainer">
           <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Colour" EntityType="Self.Colour" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Share" EntityType="Self.Share" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubComment" EntityType="Self.SubComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" Schema="Knowledgeable" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -119,14 +119,6 @@
           <Property Name="UserID" Type="Guid" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ColourID" Type="Guid" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Colour">
-          <Key>
-            <PropertyRef Name="ColourID" />
-          </Key>
-          <Property Name="ColourID" Type="Guid" Nullable="false" />
-          <Property Name="ColourName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Hex" Type="Binary" MaxLength="7" FixedLength="false" Nullable="false" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -163,11 +155,11 @@
         <EntityContainer Name="KnowledgeableDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Articles" EntityType="Self.Article" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="Colours" EntityType="Self.Colour" />
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Shares" EntityType="Self.Share" />
           <EntitySet Name="SubComments" EntityType="Self.SubComment" />
           <EntitySet Name="Users" EntityType="KnowledgeableDBModel.User" />
+          <EntitySet Name="Colours" EntityType="KnowledgeableDBModel.Colour" />
           <EntitySet Name="ResetPasswords" EntityType="KnowledgeableDBModel.ResetPassword" />
         </EntityContainer>
         <EntityType Name="User">
@@ -181,6 +173,14 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Surname" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Colour">
+          <Key>
+            <PropertyRef Name="ColourID" />
+          </Key>
+          <Property Name="ColourID" Type="Guid" Nullable="false" />
+          <Property Name="ColourName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Hex" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ResetPassword">
           <Key>
@@ -215,15 +215,6 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Colours">
-            <EntityTypeMapping TypeName="KnowledgeableDBModel.Colour">
-              <MappingFragment StoreEntitySet="Colour">
-                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-                <ScalarProperty Name="ColourName" ColumnName="ColourName" />
-                <ScalarProperty Name="Hex" ColumnName="Hex" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -272,6 +263,15 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Colours">
+            <EntityTypeMapping TypeName="KnowledgeableDBModel.Colour">
+              <MappingFragment StoreEntitySet="Colour">
+                <ScalarProperty Name="Hex" ColumnName="Hex" />
+                <ScalarProperty Name="ColourName" ColumnName="ColourName" />
+                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

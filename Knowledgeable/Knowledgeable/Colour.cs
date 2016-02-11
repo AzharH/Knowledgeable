@@ -16,6 +16,6 @@ namespace Knowledgeable
     {
         public System.Guid ColourID { get; set; }
         public string ColourName { get; set; }
-        public byte[] Hex { get; set; }
+        public string Hex { get; set; }
     }
 }

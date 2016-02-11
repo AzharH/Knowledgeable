@@ -116,15 +116,14 @@ namespace Knowledgeable.Controllers
 
                         if (hashed2 == user.Password)
                         {
-                            FormsAuthentication.SetAuthCookie(user.Name, login.RememberMe);
-                            Session["UserID"] = user.UserID;
+                            FormsAuthentication.SetAuthCookie(user.UserID.ToString(), login.RememberMe);
                             if (Url.IsLocalUrl(ReturnUrl))
                             {
                                 return Redirect(ReturnUrl);
                             }
                             else
                             {
-                                return RedirectToAction("Home","Index");
+                                return RedirectToAction("index","Category");
                             }
                         }
                     }
