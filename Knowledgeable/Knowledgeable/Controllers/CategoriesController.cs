@@ -19,9 +19,6 @@ namespace Knowledgeable.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
-
-
             return View();
         }
 
