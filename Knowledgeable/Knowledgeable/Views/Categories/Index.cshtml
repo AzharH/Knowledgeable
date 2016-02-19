@@ -21,12 +21,11 @@
 
 <div id="CategoryContainer"></div>
 
-
-<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
     $.ajax({
         type: "GET",
-        url: '/CategoriesController/LoadCategory',
+        url: '/Categories/LoadCategory',
         data: {},
         processdata: true,
         cache: false,
@@ -36,8 +35,10 @@
             //var JsonObj = $.parseJSON(data);
             $("#CategoryContainer").html(data);
         },
-        error: function () {
-            alert("Error");
+        error: function (xhr, status, error) {
+            //alert(xhr.responseText);
+            //var err = eval("(" + xhr.responseText + ")");
+            alert("error");
         },
     });
 </script>

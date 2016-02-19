@@ -147,7 +147,8 @@ namespace Knowledgeable.Controllers
             return View();
         }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [AllowAnonymous]
         public ActionResult Reset(ResetModel resetModel)
         {
@@ -180,7 +181,6 @@ namespace Knowledgeable.Controllers
             else
             {
                 ViewBag.error = "Email does not exists.";
-                return View();
             }
 
             return View();
