@@ -39,6 +39,10 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"> </script>
+    <script src="~/Scripts/tinymce/tinymce.js"></script>
+    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")" type="text/javascript"> </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

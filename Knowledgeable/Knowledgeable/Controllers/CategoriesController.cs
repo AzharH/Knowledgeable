@@ -60,17 +60,26 @@ namespace Knowledgeable.Controllers
         [HttpPost]
         public ActionResult AddCategory(CategoryModel Category)
         {
+            if (ModelState.IsValid)
+            {
+                Guid UserID = new Guid(User.Identity.Name);
+                Category newCategory = new Category();
+                newCategory.CategoryID = Guid.NewGuid();
+                newCategory.ColourID = Category.ColourID;
+                newCategory.Name = Category.Name;
+                newCategory.UserID = UserID;
+                db.Categories.Add(newCategory);
+                db.SaveChanges();
 
-            Guid UserID = new Guid(User.Identity.Name);
-            Category newCategory = new Category();
-            newCategory.CategoryID = Guid.NewGuid();
-            newCategory.ColourID = Category.ColourID;
-            newCategory.Name = Category.Name;
-            newCategory.UserID = UserID;
-            db.Categories.Add(newCategory);
-            db.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+
+            var colours = db.Colours.ToList();
+            ViewBag.ColourID = new SelectList(colours, "ColourID", "ColourName");
+
+            return View();
+
         }
         
 

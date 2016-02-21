@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Knowledgeable.Models.ArticleModel>
-
+@using GridMvc.Html
 @{
     ViewBag.Title = "Index";
 }
@@ -7,50 +7,24 @@
 <h2>Articles</h2>
 
 <p>
-    @Html.ActionLink("Create New", "AddArticle")
+    @if (ViewBag.CategoryID == null)
+    {
+        @Html.ActionLink("Create New", "AddArticle");
+    }
+    else
+    {
+        @Html.ActionLink("Create New", "AddArticle", new { id = ViewBag.CategoryID });
+        //<a href="/AddArticle/@ViewBag.CategoryID">Create New</a>
+    }
 </p>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DatePosted)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateModified)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Article1)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DatePosted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Article1)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ArticleID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ArticleID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ArticleID })
-            </td>
-        </tr>
-    }
-
-</table>
+@Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(x => x.category).Titled("Category").Sortable(true).Filterable(true);
+    columns.Add(x => x.Title).Titled("Title").Sortable(true).Filterable(true);
+    columns.Add(x => x.DatePosted).Titled("Date Posted").Sortable(true).Filterable(true);
+    columns.Add().Titled("Date Modified").Sortable(true).Filterable(true).RenderValueAs(model => model.Modified ? Html.Label(model.DateModified.ToString()) : Html.Raw("N/A"));
+    columns.Add().RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false); ;
+    columns.Add().RenderValueAs(model => Html.ActionLink("Share", "Share", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false); ;
+    columns.Add().RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false); ;
+}).WithPaging(20)
