@@ -20,7 +20,5 @@ namespace Knowledgeable.Models
         [DisplayName("Content")]
         [UIHint("tinymce_jquery_full"), AllowHtml]
         public string Article1 { get; set; }
-        public string DatePostedIndex { get; set; }
-        public string DateModIndex { get; set; }
     }
 }

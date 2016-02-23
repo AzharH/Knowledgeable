@@ -74,15 +74,6 @@ namespace Knowledgeable.Controllers
             foreach (var item in listArticle)
             {
                 Category category = db.Categories.Find(item.CategoryID);
-                
-                if(item.DateModified != null)
-                {
-                    strDateMod = item.DateModified.ToString();
-                }
-                else
-                {
-                    strDateMod = "N/A";
-                }
                 newListArticle.Add(new ArticleModel
                 {
                     ArticleID = item.ArticleID,
@@ -90,8 +81,8 @@ namespace Knowledgeable.Controllers
                     CategoryID = item.CategoryID,
                     category = category.Name,
                     Title = item.Title,
-                    DatePostedIndex = item.DatePosted.ToString(),
-                    DateModIndex = strDateMod,
+                    DatePosted = item.DatePosted,
+                    DateModified = item.DateModified,
                     Article1 = item.Article1
                 });
             }
