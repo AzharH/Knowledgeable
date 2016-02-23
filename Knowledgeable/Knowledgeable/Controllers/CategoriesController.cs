@@ -43,7 +43,7 @@ namespace Knowledgeable.Controllers
                 });
             }
 
-            return PartialView("_EditCategoryContainer" , newListCategory);
+            return PartialView("_LoadEditCategory", newListCategory);
         }
 
         [Authorize]
@@ -70,6 +70,16 @@ namespace Knowledgeable.Controllers
             return PartialView("_CategoryContainer" , newListCategory);
         }
 
+        public JsonResult Delete(Guid id)
+        {
+
+            Category category = db.Categories.Find(id);
+            db.Categories.Remove(category);
+            db.SaveChanges();
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
         [Authorize]
         public ActionResult AddCategory()
         {
@@ -78,6 +88,44 @@ namespace Knowledgeable.Controllers
 
             return View();
         }
+
+        public ActionResult Edit(Guid? id)
+        {
+
+            Category category = db.Categories.Find(id);
+            CategoryModel newCategory = new CategoryModel();
+            newCategory.Name = category.Name;
+            newCategory.CategoryID = category.CategoryID;
+
+            var colours = db.Colours.ToList();
+            ViewBag.ColourID = new SelectList(colours, "ColourID", "ColourName",category.ColourID);
+
+            return View(newCategory);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(CategoryModel category)
+        {
+            if (ModelState.IsValid)
+            {
+
+                Category newCategory = db.Categories.Find(category.CategoryID);
+                newCategory.ColourID = category.ColourID;
+                newCategory.Name = category.Name;
+
+                db.Entry(newCategory).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            var colours = db.Colours.ToList();
+            ViewBag.ColourID = new SelectList(colours, "ColourID", "ColourName", category.ColourID);
+
+            return View();
+
+        }
+
 
         [Authorize]
         [ValidateAntiForgeryToken]

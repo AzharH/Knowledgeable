@@ -17,16 +17,16 @@
     }
 </style>
 
-<div class="category" style="background-color:gold;">
-    <p onclick="categoryClicked('')">
+<div class="category" style="background-color:gold;" onclick="categoryClicked('')">
+    <p>
         All
     </p>
 </div>
 
     @foreach (var item in Model)
     {
-        <div class="category" style="background-color:#@item.Hex">
-            <p onclick="categoryClicked('@item.CategoryID')">
+        <div class="category" style="background-color:#@item.Hex" onclick="categoryClicked('@item.CategoryID')">
+            <p>
                 @item.Name
             </p>
         </div>

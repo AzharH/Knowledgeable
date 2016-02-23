@@ -2,7 +2,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2 id="titleTop">Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "AddCategory")
@@ -18,35 +18,73 @@
         overflow-x:auto;
     }
 </style>
-
+<p onclick="edit()" class="btn btn-default" id="editButton">Edit</p>
+<div id='loadingmessage' style='display:none'>
+    <img src="~/Content/ajax-loader.gif" />
+</div>
 <div id="CategoryContainer"></div>
 
-<p onclick="edit()">Edit</p>
+
 
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
+    function spinner() {
+        data = "<img src=\"../Content/ajax-loader.gif\" />";
+        $("#CategoryContainer").html(data);
+    }
     function edit() {
-        $.ajax({
-            type: "GET",
-            url: '/Categories/LoadEditCategory',
-            data: {},
-            processdata: true,
-            cache: false,
-            contentType: "application/html",
-            dataType: "html",
-            success: function (data) {
-                //var JsonObj = $.parseJSON(data);
-                $("#CategoryContainer").html(data);
-            },
-            error: function (xhr, status, error) {
-                //alert(xhr.responseText);
-                //var err = eval("(" + xhr.responseText + ")");
-                alert("error");
-            },
-        });
+        var value = document.getElementById('editButton').innerHTML;
+        if (value == "Edit") {
+            spinner()
+            $.ajax({
+                type: "GET",
+                url: '/Categories/LoadEditCategory',
+                data: {},
+                processdata: true,
+                cache: false,
+                contentType: "application/html",
+                dataType: "html",
+                success: function (data) {
+                    //var JsonObj = $.parseJSON(data);
+                    $("#CategoryContainer").html(data);
+                    document.getElementById('editButton').innerHTML = "Cancel";
+                    document.getElementById('titleTop').innerHTML = "Edit";
+
+                },
+                error: function (xhr, status, error) {
+                    //alert(xhr.responseText);
+                    //var err = eval("(" + xhr.responseText + ")");
+                    alert("error");
+                },
+            });
+        }
+        else {
+            spinner();
+            $.ajax({
+                type: "GET",
+                url: '/Categories/LoadCategory',
+                data: {},
+                processdata: true,
+                cache: false,
+                contentType: "application/html",
+                dataType: "html",
+                success: function (data) {
+                    //var JsonObj = $.parseJSON(data);
+                    $("#CategoryContainer").html(data);
+                    document.getElementById('editButton').innerHTML = "Edit";
+                    document.getElementById('titleTop').innerHTML = "Index";
+
+                },
+                error: function (xhr, status, error) {
+                    //alert(xhr.responseText);
+                    //var err = eval("(" + xhr.responseText + ")");
+                    alert("error");
+                },
+            });
+        }
     }
 
-
+    spinner();
     $.ajax({
         type: "GET",
         url: '/Categories/LoadCategory',
@@ -58,11 +96,13 @@
         success: function (data) {
             //var JsonObj = $.parseJSON(data);
             $("#CategoryContainer").html(data);
+            $('#loadingmessage').hide();
         },
         error: function (xhr, status, error) {
             //alert(xhr.responseText);
             //var err = eval("(" + xhr.responseText + ")");
             alert("error");
+            $('#loadingmessage').hide();
         },
     });
 </script>
