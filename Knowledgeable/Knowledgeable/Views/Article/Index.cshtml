@@ -23,7 +23,7 @@
     columns.Add(x => x.category).Titled("Category").Sortable(true).Filterable(true);
     columns.Add().Titled("Title").RenderValueAs(model => Html.ActionLink(model.Title, "ViewArticle", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
     columns.Add(x => x.DatePosted).Titled("Date Posted").Sortable(true).Filterable(true);
-    columns.Add().Titled("Date Modified").Sortable(true).Filterable(true).RenderValueAs(model => model.Modified ? Html.Label(model.DateModified.ToString()) : Html.Raw("N/A")).Encoded(false).Sanitized(false);
+    columns.Add().Titled("Date Modified").Sortable(true).Filterable(true).RenderValueAs(model => model.Modified ? Html.Label(model.DateModified.ToString()) : Html.Label("N/A")).Encoded(false).Sanitized(false);
     columns.Add().RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
     columns.Add().RenderValueAs(model => Html.ActionLink("Share", "Share", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
     columns.Add().RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
