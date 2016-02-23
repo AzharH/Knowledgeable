@@ -23,6 +23,31 @@ namespace Knowledgeable.Controllers
         }
 
         [Authorize]
+        public JsonResult ShareArticle(Guid id, string email)
+        {
+            User user = db.Users.Where(x => x.Email == email).FirstOrDefault();
+            if(user == null)
+            {
+                string variableName = "Email does not exist";
+                return Json(variableName, JsonRequestBehavior.AllowGet);
+            }
+            
+            Article article = db.Articles.Where(x => x.ArticleID == id).FirstOrDefault();
+            if(article.UserID == user.UserID)
+            {
+                string variableName = "You cannot share with yourself";
+                return Json(variableName, JsonRequestBehavior.AllowGet);
+            }
+
+            Share share = new Share();
+            share.ArticleID = id;
+            share.UserID = user.UserID;
+            db.Shares.Add(share);
+            db.SaveChanges();
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)

@@ -25,9 +25,9 @@
     columns.Add(x => x.category).Titled("Category").Sortable(true).Filterable(true);
     columns.Add(model => model.Title).Titled("Title").Filterable(true).Sortable(true).RenderValueAs(model => Html.ActionLink(model.Title, "ViewArticle", new { id = model.ArticleID })).Encoded(false).Sanitized(false); ;
     columns.Add(x => x.DatePosted).Titled("Date Posted").Sortable(true).Filterable(true);
-    columns.Add(x=>x.DateModified).Titled("Date Modified").Sortable(true).Filterable(true);
+    columns.Add(x => x.DateModified).Titled("Date Modified").Sortable(true).Filterable(true);
     columns.Add().RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
-    columns.Add().RenderValueAs(model => Html.ActionLink("Share", "Share", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
+    columns.Add().RenderValueAs(model => Html.Label("Share", new { onclick = "Share('" + model.ArticleID + "')" }));
     columns.Add().RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
 }).WithPaging(20)
 
@@ -35,61 +35,72 @@
 
 <div id="dialog-confirm" title="Delete item?">
 
-<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
 
 </div>
 
-<input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete">
+
+<div id="dialog-share" title="Share Article">
+    <form action="" method="post">
+        <label>Email:</label>
+        <input type="email" id="email" name="email" class="email">
+        <input id="submit" type="submit" value="Submit" class="btn btn-default" >
+    </form>
+</div>
+
+<style>
+    .email{
+        color: black;
+    }
+    </style>
+        
+        @* link to share button *@
+        <input id="button" type="button" value="Share" onclick="Share('8365C974-8D2A-43F9-B4FA-7B23110BD93F')">
+
+        <input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete">
 
 
-<script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
-    function C_Del(id)
-    {
-        alert(id);
-        $("#dialog-confirm").dialog({
-
-            resizable: false,
-
-            height: 140,
-
-            modal: true,
-
-            buttons: {
-
-                "Delete all items": function () {
-                    Del(id);
-                    $(this).dialog("close");
-
-                },
-
-                Cancel: function () {
-
-                    $(this).dialog("close");
-
-                }
-
-            }
-
+    function Share(id) {
+        $(function () {
+            $("#dialog-share").dialog({
+                autoOpen: false
+            });
+            $("#button").on("click", function () {
+                $("#dialog-share").dialog("open");
+            });
         });
-
-
+        // Validating Form Fields.....
+        $("#submit").click(function (e) {
+            var email = $("#email").val();
+            //var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            if (email == null) {
+                alert("Please enter the email address");
+                e.preventDefault();
+            } else {
+                C_Share(id, email);
+            }
+        });
     }
 
-    function Del(id) {
+    function C_Share(id, email) {
         alert(id);
         $.ajax({
             type: "GET",
-            url: '/Article/DelArticle',
-            data: {id:id},
+            url: '/Article/ShareArticle',
+            data: { id: id, email: email },
             processdata: true,
             cache: false,
             contentType: "application/html",
             dataType: "html",
-            success: function () {
-                document.getElementById('#deleted').style.display = 'block';
-                setTimeout(function () { location.reload(); }, 2000);
-                
+            success: function (data) {
+                if (data != "")
+                {
+                    alert(data);
+                }
+                else {
+                    alert('Shared');
+                }
             },
             error: function (xhr, status, error) {
                 //alert(xhr.responseText);
@@ -99,3 +110,63 @@
         });
     }
 </script>
+
+
+
+
+        <script src="~/Scripts/jquery-2.2.0.js"></script>
+        <script>
+            function C_Del(id) {
+                alert(id);
+                $("#dialog-confirm").dialog({
+
+                    resizable: false,
+
+                    height: 140,
+
+                    modal: true,
+
+                    buttons: {
+
+                        "Delete all items": function () {
+                            Del(id);
+                            $(this).dialog("close");
+
+                        },
+
+                        Cancel: function () {
+
+                            $(this).dialog("close");
+
+                        }
+
+                    }
+
+                });
+
+
+            }
+
+            function Del(id) {
+                alert(id);
+                $.ajax({
+                    type: "GET",
+                    url: '/Article/DelArticle',
+                    data: { id: id },
+                    processdata: true,
+                    cache: false,
+                    contentType: "application/html",
+                    dataType: "html",
+                    success: function () {
+                        document.getElementById('#deleted').style.display = 'block';
+                        setTimeout(function () { location.reload(); }, 2000);
+
+                    },
+                    error: function (xhr, status, error) {
+                        //alert(xhr.responseText);
+                        //var err = eval("(" + xhr.responseText + ")");
+                        alert("error");
+                    },
+                });
+            }
+        </script>
