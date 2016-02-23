@@ -14,6 +14,9 @@
         color:#23527c;
         text-decoration:underline;
     }
+    .email{
+        color: black;
+    }
 </style>
 
 <h2>Articles</h2>
@@ -53,9 +56,59 @@
 
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
-    function test() {
-        setTimeout(function () { alert("hit"); }, 2000);
+
+
+
+
+    function Share(id) {
+        $(function () {
+            $("#dialog-share").dialog({
+                autoOpen: false
+            });
+            $("#button").on("click", function () {
+                $("#dialog-share").dialog("open");
+            });
+        });
+        // Validating Form Fields.....
+        $("#submit").click(function (e) {
+            var email = $("#email").val();
+            //var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            if (email == null) {
+                alert("Please enter the email address");
+                e.preventDefault();
+            } else {
+                C_Share(id, email);
+            }
+        });
     }
+
+    function C_Share(id, email) {
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Article/ShareArticle',
+            data: { id: id, email: email },
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Shared');
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+
     function C_Del(id)
     {
         alert(id);
