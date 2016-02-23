@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -106,6 +107,33 @@ namespace Knowledgeable.Controllers
 
             ViewBag.CategoryID = new SelectList(Categories, "CategoryID", "Name","");
             return View();
+        }
+
+
+        public ActionResult ViewArticle(Guid? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+
+
+                Article article = db.Articles.Find(id);
+                ArticleModel newArticle = new ArticleModel();
+                newArticle.Article1 = article.Article1;
+                newArticle.ArticleID = article.ArticleID;
+                Category category = db.Categories.Find(article.CategoryID);
+                newArticle.category = category.Name;
+                newArticle.CategoryID = article.CategoryID;
+                newArticle.DateModified = article.DateModified;
+                newArticle.DatePosted = article.DatePosted;
+                newArticle.Title = article.Title;
+                return View(newArticle);
+            }
+
         }
 
 
