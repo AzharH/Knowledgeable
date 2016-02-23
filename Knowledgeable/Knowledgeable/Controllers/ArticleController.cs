@@ -14,12 +14,12 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         [Authorize]
-        public ActionResult DelArticle(Guid? id)
+        public JsonResult DelArticle(Guid? id)
         {
             Article article = db.Articles.Find(id);
             db.Articles.Remove(article);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]

@@ -5,7 +5,9 @@
 }
 
 <h2>Articles</h2>
-
+<p id="deleted" style="color:red; display:none; text-align:center;">
+    Item Deleted
+</p>
 <p>
     @if (ViewBag.CategoryID == null)
     {
@@ -29,39 +31,53 @@
     columns.Add().RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
 }).WithPaging(20)
 
-<input type="button" onclick="C_Del('66B72122-85F1-44B7-BBAB-BF3A589288DD')" value="Delete">
+
+
+<div id="dialog-confirm" title="Delete item?">
+
+<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+
+</div>
+
+<input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete">
 
 
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
     function C_Del(id)
     {
-        $(document).ready(function () {
-            $("#dialog-box").dialog({
-                autoOpen: false,
-                modal: true
-            });
+        alert(id);
+        $("#dialog-confirm").dialog({
 
-            $(".close").click(function (e) {
-                var currentElem = $(this);
-                $("#dialog-box").dialog({
-                    buttons: {
-                        "Confirm": function () {
-                            currentElem.remove();
-                            Del(id);
-                        },
-                        "Cancel": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
+            resizable: false,
 
-                $("#dialog-box").dialog("open");
-            });
+            height: 140,
+
+            modal: true,
+
+            buttons: {
+
+                "Delete all items": function () {
+                    Del(id);
+                    $(this).dialog("close");
+
+                },
+
+                Cancel: function () {
+
+                    $(this).dialog("close");
+
+                }
+
+            }
+
         });
+
+
     }
 
     function Del(id) {
+        alert(id);
         $.ajax({
             type: "GET",
             url: '/Article/DelArticle',
@@ -71,7 +87,9 @@
             contentType: "application/html",
             dataType: "html",
             success: function () {
-                location.reload();
+                document.getElementById('#deleted').style.display = 'block';
+                setTimeout(function () { location.reload(); }, 2000);
+                
             },
             error: function (xhr, status, error) {
                 //alert(xhr.responseText);
