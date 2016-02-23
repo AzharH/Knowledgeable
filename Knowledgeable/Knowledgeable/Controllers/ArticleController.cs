@@ -1,7 +1,9 @@
 ﻿using Knowledgeable.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,6 +12,46 @@ namespace Knowledgeable.Controllers
     public class ArticleController : Controller
     {
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
+
+        [Authorize]
+        public ActionResult Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                Article newarticle = db.Articles.Find(id);
+
+                Guid UserID = new Guid(User.Identity.Name);
+                var Categories = db.Categories.Where(x => x.UserID == UserID).ToList();
+                ViewBag.CategoryID = new SelectList(Categories, "CategoryID", "Name", newarticle.CategoryID);
+
+                ArticleModel newarticleModel = new ArticleModel();
+                newarticle.Title = newarticleModel.Title;
+                newarticle.Article1 = newarticleModel.Article1;
+                return View(newarticleModel);
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Edit(ArticleModel Article)
+        {
+            Article newarticle = db.Articles.Find(Article.ArticleID);
+
+            newarticle.CategoryID = Article.CategoryID;
+            newarticle.Title = Article.Title;
+            newarticle.DateModified = DateTime.Now;
+            newarticle.Article1 = Article.Article1;
+
+            db.Entry(newarticle).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
 
         // GET: Article
         [Authorize]
