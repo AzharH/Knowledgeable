@@ -29,6 +29,7 @@ namespace Knowledgeable.Controllers
                 ViewBag.CategoryID = new SelectList(Categories, "CategoryID", "Name", newarticle.CategoryID);
 
                 ArticleModel newarticleModel = new ArticleModel();
+                newarticleModel.ArticleID = newarticle.ArticleID;
                 newarticleModel.Title = newarticle.Title;
                 newarticleModel.Article1 = newarticle.Article1;
                 return View(newarticleModel);
