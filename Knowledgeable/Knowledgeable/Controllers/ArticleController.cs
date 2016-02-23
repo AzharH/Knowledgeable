@@ -14,6 +14,15 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         [Authorize]
+        public ActionResult DelArticle(Guid? id)
+        {
+            Article article = db.Articles.Find(id);
+            db.Articles.Remove(article);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)

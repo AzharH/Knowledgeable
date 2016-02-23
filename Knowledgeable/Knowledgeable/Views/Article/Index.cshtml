@@ -28,3 +28,56 @@
     columns.Add().RenderValueAs(model => Html.ActionLink("Share", "Share", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
     columns.Add().RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Article", new { id = model.ArticleID }, null)).Encoded(false).Sanitized(false);
 }).WithPaging(20)
+
+<input type="button" onclick="C_Del('66B72122-85F1-44B7-BBAB-BF3A589288DD')" value="Delete">
+
+
+<script src="~/Scripts/jquery-2.2.0.js"></script>
+<script>
+    function C_Del(id)
+    {
+        $(document).ready(function () {
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                modal: true
+            });
+
+            $(".close").click(function (e) {
+                var currentElem = $(this);
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            currentElem.remove();
+                            Del(id);
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+                $("#dialog-box").dialog("open");
+            });
+        });
+    }
+
+    function Del(id) {
+        $.ajax({
+            type: "GET",
+            url: '/Article/DelArticle',
+            data: {id:id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+</script>
