@@ -16,34 +16,43 @@ namespace Knowledgeable.Controllers
         [Authorize]
         public JsonResult DelArticle(Guid? id)
         {
-            Article article = db.Articles.Find(id);
-            db.Articles.Remove(article);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                Article article = db.Articles.Find(id);
+                db.Articles.Remove(article);
+                db.SaveChanges();
+            }
+
             return Json(null, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
         public JsonResult ShareArticle(Guid id, string email)
         {
-            User user = db.Users.Where(x => x.Email == email).FirstOrDefault();
-            if(user == null)
+            if (ModelState.IsValid)
             {
-                string variableName = "Email does not exist";
-                return Json(variableName, JsonRequestBehavior.AllowGet);
-            }
-            
-            Article article = db.Articles.Where(x => x.ArticleID == id).FirstOrDefault();
-            if(article.UserID == user.UserID)
-            {
-                string variableName = "You cannot share with yourself";
-                return Json(variableName, JsonRequestBehavior.AllowGet);
+                User user = db.Users.Where(x => x.Email == email).FirstOrDefault();
+                if (user == null)
+                {
+                    string variableName = "Email does not exist";
+                    return Json(variableName, JsonRequestBehavior.AllowGet);
+                }
+
+                Article article = db.Articles.Where(x => x.ArticleID == id).FirstOrDefault();
+                if (article.UserID == user.UserID)
+                {
+                    string variableName1 = "You cannot share with yourself";
+                    return Json(variableName1, JsonRequestBehavior.AllowGet);
+                }
+
+                Share share = new Share();
+                share.ShareID = Guid.NewGuid();
+                share.ArticleID = id;
+                share.UserID = user.UserID;
+                db.Shares.Add(share);
+                db.SaveChanges();
             }
 
-            Share share = new Share();
-            share.ArticleID = id;
-            share.UserID = user.UserID;
-            db.Shares.Add(share);
-            db.SaveChanges();
             return Json(null, JsonRequestBehavior.AllowGet);
         }
 

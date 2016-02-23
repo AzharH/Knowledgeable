@@ -4,6 +4,14 @@
     ViewBag.Title = "Index";
 }
 <style>
+    .delItem {
+        display:none;
+    }
+
+    .share{
+        display:none;
+    }
+
     .link{
         color:#337ab7;
         text-decoration:none;
@@ -48,14 +56,16 @@
 
 
 
-<div id="dialog-confirm" title="Delete item?">
+<div id="dialog-confirm" title="Delete item?" class="delItem">
 
 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
 
 </div>
 
 
-<div id="dialog-share" title="Share Article">
+
+
+<div id="dialog-share" title="Share Article" class="share">
     <form action="" method="post">
         <label>Email:</label>
         <input type="email" id="email" name="email" class="email">
@@ -63,24 +73,15 @@
     </form>
 </div>
 
-<style>
-    .email {
-        color: black;
-    }
-</style>
-
 @* link to share button *@
-<input id="button" type="button" value="Share" onclick="Share('8365C974-8D2A-43F9-B4FA-7B23110BD93F')">
+<input id="button" type="button" value="Share" onclick="Share('529E7556-2AFA-4C82-ACE1-6AA8AA5C11A9')" />
 
-<input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete">
+<input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete" />
 
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
-
-
-
-
     function Share(id) {
+        //alert(id, email);
         $(function () {
             $("#dialog-share").dialog({
                 autoOpen: false
@@ -103,7 +104,7 @@
     }
 
     function C_Share(id, email) {
-        alert(id);
+        //alert(id);
         $.ajax({
             type: "GET",
             url: '/Article/ShareArticle',
@@ -139,6 +140,8 @@
             height: 200,
 
             modal: true,
+
+
 
             buttons: {
 
