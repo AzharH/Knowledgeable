@@ -22,12 +22,36 @@ namespace Knowledgeable.Controllers
             return View();
         }
 
+        public PartialViewResult LoadEditCategory()
+        {
+
+            Guid UserID = new Guid(User.Identity.Name);
+
+            List<Category> listCategory = db.Categories.Where(x => x.UserID == UserID).OrderBy(x => x.Name).ToList();
+
+            List<CategoryModel> newListCategory = new List<CategoryModel>();
+            foreach (var item in listCategory)
+            {
+                Colour colour = db.Colours.Find(item.ColourID);
+                newListCategory.Add(new CategoryModel
+                {
+                    CategoryID = item.CategoryID,
+                    ColourID = item.ColourID,
+                    Hex = colour.Hex,
+                    Name = item.Name,
+                    UserID = item.UserID
+                });
+            }
+
+            return PartialView("_EditCategoryContainer" , newListCategory);
+        }
+
         [Authorize]
         public PartialViewResult LoadCategory()
         {
             Guid UserID = new Guid(User.Identity.Name);
 
-            List<Category> listCategory = db.Categories.Where(x=>x.UserID==UserID).ToList();
+            List<Category> listCategory = db.Categories.Where(x=>x.UserID==UserID).OrderBy(x=>x.Name).ToList();
 
             List<CategoryModel> newListCategory = new List<CategoryModel>();
             foreach(var item in listCategory)

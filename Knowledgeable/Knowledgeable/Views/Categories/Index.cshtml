@@ -21,8 +21,32 @@
 
 <div id="CategoryContainer"></div>
 
+<p onclick="edit()">Edit</p>
+
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
+    function edit() {
+        $.ajax({
+            type: "GET",
+            url: '/Categories/LoadEditCategory',
+            data: {},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                //var JsonObj = $.parseJSON(data);
+                $("#CategoryContainer").html(data);
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+
     $.ajax({
         type: "GET",
         url: '/Categories/LoadCategory',

@@ -54,6 +54,26 @@
 
 </div>
 
+
+<div id="dialog-share" title="Share Article">
+    <form action="" method="post">
+        <label>Email:</label>
+        <input type="email" id="email" name="email" class="email">
+        <input id="submit" type="submit" value="Submit" class="btn btn-default">
+    </form>
+</div>
+
+<style>
+    .email {
+        color: black;
+    }
+</style>
+
+@* link to share button *@
+<input id="button" type="button" value="Share" onclick="Share('8365C974-8D2A-43F9-B4FA-7B23110BD93F')">
+
+<input type="button" onclick="C_Del('8365C974-8D2A-43F9-B4FA-7B23110BD93F')" value="Delete">
+
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
 

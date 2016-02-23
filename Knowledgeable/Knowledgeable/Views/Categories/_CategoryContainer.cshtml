@@ -16,24 +16,27 @@
         font-size: 25px;
     }
 </style>
+
 <div class="category" style="background-color:gold;">
     <p onclick="categoryClicked('')">
         All
     </p>
 </div>
-@foreach (var item in Model){
-    <div class="category" style="background-color:#@item.Hex">
-        <p onclick="categoryClicked('@item.CategoryID')">
-            @item.Name
-        </p>
-    </div>
-}
 
-
-<script>
-    function categoryClicked(id) {
-
-        window.location.href = '/article/index/'+id
-
+    @foreach (var item in Model)
+    {
+        <div class="category" style="background-color:#@item.Hex">
+            <p onclick="categoryClicked('@item.CategoryID')">
+                @item.Name
+            </p>
+        </div>
     }
-</script>
+
+
+    <script>
+        function categoryClicked(id) {
+
+            window.location.href = '/article/index/' + id
+
+        }
+    </script>
