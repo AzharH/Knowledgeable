@@ -17,9 +17,10 @@ namespace Knowledgeable.Models
         public string Title { get; set; }
         public System.DateTime DatePosted { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public bool Modified { get; set; }
         [DisplayName("Content")]
         [UIHint("tinymce_jquery_full"), AllowHtml]
         public string Article1 { get; set; }
+        public string DatePostedIndex { get; set; }
+        public string DateModIndex { get; set; }
     }
 }
