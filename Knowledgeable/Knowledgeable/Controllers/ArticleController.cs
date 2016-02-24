@@ -45,6 +45,13 @@ namespace Knowledgeable.Controllers
                     return Json(variableName1, JsonRequestBehavior.AllowGet);
                 }
 
+                Share share1 = db.Shares.Where(x => x.ArticleID == id && x.UserID == user.UserID).FirstOrDefault();
+                if (share1 != null)
+                {
+                    string variableName1 = "The article is already shared with the user";
+                    return Json(variableName1, JsonRequestBehavior.AllowGet);
+                }
+
                 Share share = new Share();
                 share.ShareID = Guid.NewGuid();
                 share.ArticleID = id;
