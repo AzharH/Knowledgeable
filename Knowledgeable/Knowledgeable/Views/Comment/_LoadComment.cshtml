@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Knowledgeable.Models.CommentsModel>
+
+<style>
+    .Subcomment
+    {
+        margin-left: 20px;
+    }
+</style>
+
+<h2>Comments</h2>
+
+
+
+@foreach (var item in Model.listComment)
+{
+    <div id="comment" class="comment">
+        <h3>@item.UserID</h3>
+
+        <p>@item.Comment1</p>
+
+        <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote</span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote</span> @item.DownVote </p>
+
+        @foreach (var item in Model.listSubcomment)
+        {
+            if (item != null)
+            { 
+                <div id="Subcomment" class="Subcomment">
+                    <h3>@item.UserID</h3>
+
+                    <p>@item.Comment1</p>
+
+                    <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote</span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote</span> @item.DownVote </p>
+                </div>
+            }
+        }
+    </div>
+}

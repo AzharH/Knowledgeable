@@ -24,7 +24,6 @@ namespace Knowledgeable.Controllers
 
         public PartialViewResult LoadEditCategory()
         {
-
             Guid UserID = new Guid(User.Identity.Name);
 
             List<Category> listCategory = db.Categories.Where(x => x.UserID == UserID).OrderBy(x => x.Name).ToList();
