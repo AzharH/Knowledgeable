@@ -31,7 +31,6 @@ namespace Knowledgeable.Models
     {
         public System.Guid UserID { get; set; }
 
-        [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
@@ -40,6 +39,9 @@ namespace Knowledgeable.Models
         public string Surname { get; set; }
 
         public string ProfilePicture { get; set; }
+        [Display(Name = "Upload Picture")]
+        public HttpPostedFileBase PictureFile { get; set; }
+
         [Display(Name = "Articles posted")]
         public int NumArticles { get; set; }
         [Display(Name = "Shared Articles")]

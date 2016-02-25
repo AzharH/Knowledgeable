@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Knowledgeable;
 using Knowledgeable.Models;
+using System.IO;
 
 namespace Knowledgeable.Controllers
 {
@@ -101,7 +102,14 @@ namespace Knowledgeable.Controllers
             {
                 return HttpNotFound();
             }
-            return View(user);
+
+            ProfileModel profile = new ProfileModel();
+            profile.Name = user.Name;
+            profile.Surname = user.Surname;
+            profile.UserID = user.UserID;
+            profile.ProfilePicture = user.ProfilePicture;
+
+            return View(profile);
         }
 
         // POST: Profile/Edit/5
@@ -109,15 +117,39 @@ namespace Knowledgeable.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserID,Email,Password,Salt,Name,Surname,Active")] User user)
+        public ActionResult Edit(ProfileModel profile)
         {
             if (ModelState.IsValid)
             {
+                Guid UserID = new Guid(User.Identity.Name);
+                if (UserID != profile.UserID)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                User user = db.Users.Find(UserID);
+
+                if (profile.PictureFile != null)
+                {
+                    string dirname = "~/Content/ProfilePicture";
+ 
+                    var fileName = Path.GetFileName(profile.PictureFile.FileName);
+                    int extPos = fileName.LastIndexOf('.');
+                    string ext = fileName.Substring(extPos);
+                    string newFileName = UserID.ToString() + ext;
+                    var path = Path.Combine(Server.MapPath(dirname), (newFileName));
+                    profile.PictureFile.SaveAs(path);
+                    user.ProfilePicture = ext;
+                }
+
+
+                user.Name = profile.Name;
+                user.Surname = profile.Surname;
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(profile);
         }
 
         // GET: Profile/Delete/5
