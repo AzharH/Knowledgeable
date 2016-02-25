@@ -8,18 +8,24 @@
 
     .comment
     {
+        background-color:gray;
+        border-radius:10px;
         padding-bottom:8px;
         padding-top:10px;
         padding-right:5px;
         padding-left:5px;
+        margin-bottom:10px;
     }
 
     .Subcomment
     {
+        background-color:lightgray;
+        border-radius:10px;
         padding-bottom:5px;
         padding-top:5px;
         padding-right:15px;
         padding-left:5px;
+        margin-bottom:10px;
     }
 </style>
 
@@ -34,11 +40,11 @@
 
         <p>@item.Comment1</p>
 
-        <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote</span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote</span> @item.DownVote </p>
+        <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote: </span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote: </span> @item.DownVote </p>
 
 
         <div class="reply" id="reply">
-            <textarea type="text" id="S_comment" rows="3" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Write a comment..."></textarea>
+            <textarea type="text" id="@item.CommentID" rows="3" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Reply to this comment"></textarea>
             <br /><br />
             <input type="button" value="Reply" onclick="SubmitS_Comment('@item.CommentID')" class="btn btn-default" />
         </div>
@@ -47,14 +53,14 @@
 
         @foreach (var sub in item.listSubcomment)
         {
-            if (item != null)
+            if (sub != null)
             { 
                 <div id="Subcomment" class="Subcomment">
                     <h3>@sub.UserID</h3>
 
                     <p>@sub.SubComment1</p>
 
-                    <p>@sub.DatePosted | <span onclick="Upvote(@sub.CommentID)">Upvote</span> @sub.UpVote | <span onclick="Downvote(@sub.CommentID)">Downvote</span> @sub.DownVote </p>
+                    <p>@sub.DatePosted | <span onclick="Upvote(@sub.CommentID)">Upvote: </span> @sub.UpVote | <span onclick="Downvote(@sub.CommentID)">Downvote: </span> @sub.DownVote </p>
                 </div>
             }
         }
@@ -65,7 +71,7 @@
 
     function SubmitS_Comment(id) {
         alert(id);
-        var comment = $('#S_comment').val();
+        var comment = $('#' + id).val();
         SS_Comment(id, comment);
     }
 
