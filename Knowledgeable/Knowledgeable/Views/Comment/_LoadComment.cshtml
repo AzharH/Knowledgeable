@@ -27,6 +27,25 @@
         padding-left:5px;
         margin-bottom:10px;
     }
+
+    .vote
+    {
+        color:blue;
+        cursor:pointer;
+    }
+
+    .vote:hover
+    {
+        color:blue;
+        text-decoration:underline;
+        cursor:pointer;
+    }
+
+    .vote:active
+    {
+        color:red;
+        cursor:pointer;
+    }
 </style>
 
 <h3>Comments</h3>
@@ -40,7 +59,7 @@
 
         <p>@item.Comment1</p>
 
-        <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote: </span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote: </span> @item.DownVote </p>
+        <p>@item.DatePosted | <span class="vote" onclick="UpvoteC('@item.CommentID')">Upvote: </span> @item.UpVote | <span class="vote" onclick="DownvoteC('@item.CommentID')">Downvote: </span> @item.DownVote </p>
 
 
         <div class="reply" id="reply">
@@ -60,7 +79,7 @@
 
                     <p>@sub.SubComment1</p>
 
-                    <p>@sub.DatePosted | <span onclick="Upvote(@sub.CommentID)">Upvote: </span> @sub.UpVote | <span onclick="Downvote(@sub.CommentID)">Downvote: </span> @sub.DownVote </p>
+                    <p>@sub.DatePosted | <span class="vote" onclick="UpvoteSC('@sub.SubCommentID')">Upvote: </span> @sub.UpVote | <span class="vote" onclick="DownvoteSC('@sub.SubCommentID')">Downvote: </span> @sub.DownVote </p>
                 </div>
             }
         }
@@ -68,6 +87,118 @@
 }
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
+
+    function UpvoteC(id)
+    {
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/UpvoteC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Upvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function UpvoteSC(id)
+    {
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/UpvoteSC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Upvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function DownvoteC(id)
+    {
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/DownvoteC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Downvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function DownvoteSC(id)
+    {
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/DownvoteSC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Downvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
 
     function SubmitS_Comment(id) {
         alert(id);
@@ -92,8 +223,33 @@
                 }
                 else {
                     alert('Subcomment has been posted');
-                    setTimeout(function () { location.reload(); }, 2000);
+                    reload();
                 }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function reload()
+    {
+        $.ajax({
+            type: "GET",
+            url: '/Comment/LoadComment',
+            data: { id: articleid},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                //var JsonObj = $.parseJSON(data);
+                $("#comment").html(data);
+                document.getElementById('editButton').innerHTML = "Cancel";
+                document.getElementById('titleTop').innerHTML = "Edit";
+
             },
             error: function (xhr, status, error) {
                 //alert(xhr.responseText);

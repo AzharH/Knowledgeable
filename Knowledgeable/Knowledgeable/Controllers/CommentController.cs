@@ -16,6 +16,62 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         [Authorize]
+        public JsonResult UpvoteC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newcomment = db.Comments.Find(id);
+                newcomment.UpVote = newcomment.UpVote + 1;
+                db.Entry(newcomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult UpvoteSC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                SubComment newscomment = db.SubComments.Find(id);
+                newscomment.UpVote = newscomment.UpVote + 1;
+                db.Entry(newscomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult DownvoteC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newcomment = db.Comments.Find(id);
+                newcomment.DownVote = newcomment.DownVote - 1;
+                db.Entry(newcomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult DownvoteSC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                SubComment newscomment = db.SubComments.Find(id);
+                newscomment.DownVote = newscomment.DownVote - 1;
+                db.Entry(newscomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
         public JsonResult SComment(Guid articleId, string comment)
         {
             Guid UserID = new Guid(User.Identity.Name);
@@ -33,6 +89,13 @@ namespace Knowledgeable.Controllers
                 db.Comments.Add(comment_);
                 db.SaveChanges();
             }
+
+            //User user = new User();
+            //string name = user.Name;
+            string Subject = "Article - New Comment";
+            string mailContent = "<p>There's a new comment on your article</p>";
+
+            //Utility.SendMail(name, user.Email, Subject, mailContent);
 
             return Json(null, JsonRequestBehavior.AllowGet);
         }

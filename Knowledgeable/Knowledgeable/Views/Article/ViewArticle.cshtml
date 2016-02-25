@@ -48,7 +48,7 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ArticleID }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
 </p>
 
 
@@ -86,7 +86,7 @@
                 }
                 else {
                     alert('Comment has been posted');
-                    setTimeout(function () { location.reload(); }, 2000);
+                    reload();
                 }
             },
             error: function (xhr, status, error) {
@@ -98,25 +98,25 @@
     }
 
     var articleid = '@Model.ArticleID';
-    $.ajax({
-        type: "GET",
-        url: '/Comment/LoadComment',
-        data: { id:articleid},
-        processdata: true,
-        cache: false,
-        contentType: "application/html",
-        dataType: "html",
-        success: function (data) {
-            //var JsonObj = $.parseJSON(data);
-            $("#comment").html(data);
-            document.getElementById('editButton').innerHTML = "Cancel";
-            document.getElementById('titleTop').innerHTML = "Edit";
+        $.ajax({
+            type: "GET",
+            url: '/Comment/LoadComment',
+            data: { id: articleid },
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                //var JsonObj = $.parseJSON(data);
+                $("#comment").html(data);
+                document.getElementById('editButton').innerHTML = "Cancel";
+                document.getElementById('titleTop').innerHTML = "Edit";
 
-        },
-        error: function (xhr, status, error) {
-            //alert(xhr.responseText);
-            //var err = eval("(" + xhr.responseText + ")");
-            alert("error");
-        },
-    });
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
 </script>
