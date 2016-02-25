@@ -53,19 +53,51 @@
 
 
 <div id="comment"></div>
+
+
+<br/>
 <div>
-    <input type="text" id="comment" alt="Write a comment..." />
-    <input type="button" value="Post" onclick="SubmitComment()" />
+    <textarea type="text" id="comment_" rows="5" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Write a comment..."></textarea>
+    <br/><br/>
+    <input type="button" value="Post a new comment" onclick="SubmitComment('@Model.ArticleID')" class="btn btn-default"/>
 </div>
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
-    var articleid = '@Model.ArticleID';
-    function SubmitComment(){
-        var comment = document.getElementById("comment");
-        alert(comment.value);
+
+    function SubmitComment(articleid) {
+        var comment = $('#comment_').val();
+        S_Comment(articleid, comment);
     }
 
+    function S_Comment(articleid, comment) {
+        alert(articleid);
+        alert(comment);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/SComment',
+            data: { articleid: articleid, comment: comment },
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Comment has been posted');
+                    setTimeout(function () { location.reload(); }, 2000);
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
 
+    var articleid = '@Model.ArticleID';
     $.ajax({
         type: "GET",
         url: '/Comment/LoadComment',
@@ -76,7 +108,7 @@
         dataType: "html",
         success: function (data) {
             //var JsonObj = $.parseJSON(data);
-            $("#CategoryContainer").html(data);
+            $("#comment").html(data);
             document.getElementById('editButton').innerHTML = "Cancel";
             document.getElementById('titleTop').innerHTML = "Edit";
 

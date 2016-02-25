@@ -15,6 +15,50 @@ namespace Knowledgeable.Controllers
     {
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
+        [Authorize]
+        public JsonResult SComment(Guid articleId, string comment)
+        {
+            Guid UserID = new Guid(User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                Comment comment_ = new Comment();
+                comment_.CommentID = Guid.NewGuid();
+                comment_.ArticleID = articleId;
+                comment_.UserID = UserID;
+                comment_.DatePosted = DateTime.Now;
+                comment_.Comment1 = comment;
+                comment_.UpVote = 0;
+                comment_.DownVote = 0;
+                db.Comments.Add(comment_);
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult SS_Comment(Guid id, string comment)
+        {
+            Guid UserID = new Guid(User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                SubComment Scomment_ = new SubComment();
+                Scomment_.SubCommentID = Guid.NewGuid();
+                Scomment_.CommentID = id;
+                Scomment_.UserID = UserID;
+                Scomment_.SubComment1 = comment;
+                Scomment_.DatePosted = DateTime.Now;
+                Scomment_.UpVote = 0;
+                Scomment_.DownVote = 0;
+                db.SubComments.Add(Scomment_);
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Comment
         public PartialViewResult LoadComment(Guid id)
         {
