@@ -90,13 +90,6 @@ namespace Knowledgeable.Controllers
                 db.SaveChanges();
             }
 
-            //User user = new User();
-            //string name = user.Name;
-            string Subject = "Article - New Comment";
-            string mailContent = "<p>There's a new comment on your article</p>";
-
-            //Utility.SendMail(name, user.Email, Subject, mailContent);
-
             return Json(null, JsonRequestBehavior.AllowGet);
         }
 
@@ -128,18 +121,20 @@ namespace Knowledgeable.Controllers
             Guid UserID = new Guid(User.Identity.Name);
 
 
-            List<Comment> comment = db.Comments.Where(x => x.ArticleID == id).ToList();
+            List<Comment> comment = db.Comments.Where(x => x.ArticleID == id).OrderBy(x => x.DatePosted).ToList();
             List<CommentModel> commentModel = new List<CommentModel>();
             foreach(var item in comment)
             {
-                List<SubComment> subComment = db.SubComments.Where(x => x.CommentID == item.CommentID).ToList();
+                List<SubComment> subComment = db.SubComments.Where(x => x.CommentID == item.CommentID).OrderBy(x => x.DatePosted).ToList();
                 List<SubCommentModel> subCommentModel = new List<SubCommentModel>();
                 User user = new User();
                 string name;
+                string ProfilePicture;
                 foreach (var sub in subComment)
                 {
                     user = db.Users.Find(sub.UserID);
                     name = user.Name + " " + user.Surname;
+                    ProfilePicture = user.ProfilePicture;
 
                     subCommentModel.Add(new SubCommentModel
                     {
@@ -151,18 +146,21 @@ namespace Knowledgeable.Controllers
                         SubCommentID = sub.CommentID,
                         UpVote = sub.UpVote,
                         UserID = sub.UserID,
-                        userName = name
+                        userName = name,
+                        ProfilePicture = ProfilePicture
                     });
                 }
 
                 user = db.Users.Find(item.UserID);
                 name = user.Name + " " + user.Surname;
+                ProfilePicture = user.ProfilePicture;
 
                 commentModel.Add(new CommentModel
                 {
                     ArticleID = item.ArticleID,
                     UserID = item.UserID,
                     userName = name,
+                    ProfilePicture = ProfilePicture,
                     Comment1 = item.Comment1,
                     CommentID = item.CommentID,
                     DatePosted = item.DatePosted,
