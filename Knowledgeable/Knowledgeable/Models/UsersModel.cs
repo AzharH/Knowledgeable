@@ -24,6 +24,7 @@ namespace Knowledgeable.Models
         public string Surname { get; set; }
 
         public bool Active { get; set; }
+        public string ProfilePicture { get; set; }
     }
 
     public class LoginModel
