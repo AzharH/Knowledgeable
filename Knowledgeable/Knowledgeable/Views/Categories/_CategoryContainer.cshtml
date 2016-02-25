@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Knowledgeable.Models.CategoryModel>
+﻿@model Knowledgeable.Models.indexCategory
 
 <style>
     .category{
@@ -16,14 +16,16 @@
         font-size: 25px;
     }
 </style>
+<div style="overflow:auto;">
+    <h4>My Category</h4>
+    <hr />
+    <div class="category" style="background-color:gold;" onclick="categoryClicked('')">
+        <p>
+            All
+        </p>
+    </div>
 
-<div class="category" style="background-color:gold;" onclick="categoryClicked('')">
-    <p>
-        All
-    </p>
-</div>
-
-    @foreach (var item in Model)
+    @foreach (var item in Model.Category)
     {
         <div class="category" style="background-color:#@item.Hex" onclick="categoryClicked('@item.CategoryID')">
             <p>
@@ -31,6 +33,21 @@
             </p>
         </div>
     }
+</div>
+
+<div style="overflow:auto;">
+    <h4>Shared</h4>
+    <hr />
+    @foreach (var item in Model.CategoryShared)
+    {
+        <div class="category" style="background-color:#@item.Hex" onclick="categoryClicked('@item.CategoryID')">
+            <p>
+                @item.Name
+            </p>
+        </div>
+    }
+</div>
+
 
 
     <script>

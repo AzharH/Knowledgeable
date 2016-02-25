@@ -66,7 +66,30 @@ namespace Knowledgeable.Controllers
                 });
             }
 
-            return PartialView("_CategoryContainer" , newListCategory);
+            List<Share> share = db.Shares.Where(x => x.UserID == UserID).ToList();
+            List<CategorySharedModel> categoryShared = new List<CategorySharedModel>();
+            foreach (var item in share)
+            {
+                Article newArticle = db.Articles.Find(item.ArticleID);
+                if (categoryShared.Where(x => x.CategoryID == newArticle.CategoryID).FirstOrDefault() == null)
+                {
+                    Category newCategory = db.Categories.Find(newArticle.CategoryID);
+                    Colour colour = db.Colours.Find(newCategory.ColourID);
+                    categoryShared.Add(new CategorySharedModel
+                    {
+                        CategoryID = newCategory.CategoryID,
+                        ColourID = newCategory.ColourID,
+                        Name = newCategory.Name,
+                        Hex = colour.Hex
+                    });
+                }
+            }
+
+            indexCategory indexCategory = new indexCategory();
+            indexCategory.Category = newListCategory;
+            indexCategory.CategoryShared = categoryShared;
+
+            return PartialView("_CategoryContainer" , indexCategory);
         }
 
         public JsonResult Delete(Guid id)
