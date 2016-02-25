@@ -30,8 +30,8 @@ namespace Knowledgeable
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Share> Shares { get; set; }
         public virtual DbSet<SubComment> SubComments { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Colour> Colours { get; set; }
         public virtual DbSet<ResetPassword> ResetPasswords { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

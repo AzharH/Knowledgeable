@@ -21,5 +21,6 @@ namespace Knowledgeable
         public string Name { get; set; }
         public string Surname { get; set; }
         public bool Active { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }

@@ -260,7 +260,17 @@ namespace Knowledgeable.Controllers
             return RedirectToAction("Login");
         }
 
-        
+        public JsonResult GetName()
+        {
+            Guid UserID = new Guid(User.Identity.Name);
+
+            User user = db.Users.Find(UserID);
+            string name = user.Name;
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -7,10 +7,33 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Manage", id="userNameAnchor" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
+    <script src="~/Scripts/jquery-2.2.0.js"></script>
+    <script>
+        $.ajax({
+            type: "GET",
+            url: '/Login/GetName',
+            data: { },
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                //var JsonObj = $.parseJSON(data);
+                document.getElementById('userNameAnchor').innerHTML = "Hello " + data.replace(/['"]+/g, '') + "!";
+
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    </script>
+
     }
 }
 else
