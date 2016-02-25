@@ -121,7 +121,6 @@ namespace Knowledgeable.Controllers
             }
 
             List<ArticleModel> newListArticle = new List<ArticleModel>();
-            string strDateMod = "";
             foreach (var item in listArticle)
             {
                 Category category = db.Categories.Find(item.CategoryID);

@@ -91,6 +91,11 @@ namespace Knowledgeable.Controllers
         public ActionResult Edit(Guid? id)
         {
 
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             Category category = db.Categories.Find(id);
             CategoryModel newCategory = new CategoryModel();
             newCategory.Name = category.Name;

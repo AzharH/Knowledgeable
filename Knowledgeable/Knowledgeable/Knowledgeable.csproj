@@ -248,7 +248,7 @@
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\ColourModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
-    <Compile Include="Models\CommentsModel.cs" />
+    <Compile Include="Models\ViewCommentsModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />

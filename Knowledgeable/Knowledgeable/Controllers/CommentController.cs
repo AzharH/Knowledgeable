@@ -20,48 +20,53 @@ namespace Knowledgeable.Controllers
         {
             Guid UserID = new Guid(User.Identity.Name);
 
-            Comment comment = db.Comments.Find(id);
 
-            CommentsModel commentsModel = new CommentsModel();
-
-            List<Comment> listComment = db.Comments.Where(x => x.ArticleID == id).ToList();
-            List<SubComment> listSubcomment = db.SubComments.Where(x => x.CommentID == comment.CommentID).ToList();
-
-
-
-            List<Comment> newlistcomment = new List<Comment>();
-            foreach (Comment item in listComment)
+            List<Comment> comment = db.Comments.Where(x => x.ArticleID == id).ToList();
+            List<CommentModel> commentModel = new List<CommentModel>();
+            foreach(var item in comment)
             {
-                newlistcomment.Add(new Comment(){
-                    CommentID = item.CommentID,
+                List<SubComment> subComment = db.SubComments.Where(x => x.CommentID == item.CommentID).ToList();
+                List<SubCommentModel> subCommentModel = new List<SubCommentModel>();
+                User user = new User();
+                string name;
+                foreach (var sub in subComment)
+                {
+                    user = db.Users.Find(sub.UserID);
+                    name = user.Name + " " + user.Surname;
+
+                    subCommentModel.Add(new SubCommentModel
+                    {
+
+                        CommentID = sub.CommentID,
+                        DatePosted = sub.DatePosted,
+                        DownVote = sub.DownVote,
+                        SubComment1 = sub.SubComment1,
+                        SubCommentID = sub.CommentID,
+                        UpVote = sub.UpVote,
+                        UserID = sub.UserID,
+                        userName = name
+                    });
+                }
+
+                user = db.Users.Find(item.UserID);
+                name = user.Name + " " + user.Surname;
+
+                commentModel.Add(new CommentModel
+                {
                     ArticleID = item.ArticleID,
                     UserID = item.UserID,
+                    userName = name,
                     Comment1 = item.Comment1,
-                    DatePosted = item.DatePosted,
-                    UpVote = item.UpVote,
-                    DownVote = item.DownVote
-                });
-            }
-
-            List<SubComment> newlistSubcomment = new List<SubComment>();
-            foreach (SubComment item in listSubcomment)
-            {
-                newlistSubcomment.Add(new SubComment()
-                {
-                    SubCommentID = item.SubCommentID,
                     CommentID = item.CommentID,
-                    UserID = item.UserID,
-                    SubComment1 = item.SubComment1,
                     DatePosted = item.DatePosted,
+                    DownVote = item.DownVote,
                     UpVote = item.UpVote,
-                    DownVote = item.DownVote
+                    listSubcomment = subCommentModel
                 });
+
             }
 
-            commentsModel.listComment = newlistcomment;
-            commentsModel.listSubcomment = newlistSubcomment;
-
-                return PartialView("_LoadComment", commentsModel);
+            return PartialView("_LoadComment", commentModel);
         }
     }
 }

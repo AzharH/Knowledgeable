@@ -10,6 +10,8 @@ namespace Knowledgeable.Models
         public System.Guid SubCommentID { get; set; }
         public System.Guid CommentID { get; set; }
         public System.Guid UserID { get; set; }
+        public string userName { get; set; }
+
         public string SubComment1 { get; set; }
         public System.DateTime DatePosted { get; set; }
         public int UpVote { get; set; }

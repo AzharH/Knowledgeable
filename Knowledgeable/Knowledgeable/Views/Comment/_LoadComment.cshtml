@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Knowledgeable.Models.CommentsModel>
+﻿@model IEnumerable<Knowledgeable.Models.CommentModel>
 
 <style>
     .Subcomment
@@ -11,7 +11,7 @@
 
 
 
-@foreach (var item in Model.listComment)
+@foreach (var item in Model)
 {
     <div id="comment" class="comment">
         <h3>@item.UserID</h3>
@@ -20,7 +20,7 @@
 
         <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote</span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote</span> @item.DownVote </p>
 
-        @foreach (var item in Model.listSubcomment)
+        @foreach (var sub in item.listSubcomment)
         {
             if (item != null)
             { 

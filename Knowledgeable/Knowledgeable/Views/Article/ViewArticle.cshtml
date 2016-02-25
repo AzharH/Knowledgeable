@@ -1,5 +1,4 @@
-﻿@model Knowledgeable.Models.CommentModel
-
+﻿@model Knowledgeable.Models.ArticleModel
 @{
     ViewBag.Title = "ViewArticle";
 }
@@ -53,7 +52,39 @@
 </p>
 
 
-<div id="comment">
-    
+<div id="comment"></div>
+<div>
+    <input type="text" id="comment" alt="Write a comment..." />
+    <input type="button" value="Post" onclick="SubmitComment()" />
 </div>
+<script src="~/Scripts/jquery-2.2.0.js"></script>
+<script>
+    var articleid = '@Model.ArticleID';
+    function SubmitComment(){
+        var comment = document.getElementById("comment");
+        alert(comment.value);
+    }
 
+
+    $.ajax({
+        type: "GET",
+        url: '/Comment/LoadComment',
+        data: { id:articleid},
+        processdata: true,
+        cache: false,
+        contentType: "application/html",
+        dataType: "html",
+        success: function (data) {
+            //var JsonObj = $.parseJSON(data);
+            $("#CategoryContainer").html(data);
+            document.getElementById('editButton').innerHTML = "Cancel";
+            document.getElementById('titleTop').innerHTML = "Edit";
+
+        },
+        error: function (xhr, status, error) {
+            //alert(xhr.responseText);
+            //var err = eval("(" + xhr.responseText + ")");
+            alert("error");
+        },
+    });
+</script>
