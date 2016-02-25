@@ -16,6 +16,62 @@ namespace Knowledgeable.Controllers
         private KnowledgeableDBEntities db = new KnowledgeableDBEntities();
 
         [Authorize]
+        public JsonResult UpvoteC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newcomment = db.Comments.Find(id);
+                newcomment.UpVote = newcomment.UpVote + 1;
+                db.Entry(newcomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult UpvoteSC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                SubComment newscomment = db.SubComments.Find(id);
+                newscomment.UpVote = newscomment.UpVote + 1;
+                db.Entry(newscomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult DownvoteC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newcomment = db.Comments.Find(id);
+                newcomment.DownVote = newcomment.DownVote - 1;
+                db.Entry(newcomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult DownvoteSC(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                SubComment newscomment = db.SubComments.Find(id);
+                newscomment.DownVote = newscomment.DownVote - 1;
+                db.Entry(newscomment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
         public JsonResult SComment(Guid articleId, string comment)
         {
             Guid UserID = new Guid(User.Identity.Name);
@@ -65,18 +121,20 @@ namespace Knowledgeable.Controllers
             Guid UserID = new Guid(User.Identity.Name);
 
 
-            List<Comment> comment = db.Comments.Where(x => x.ArticleID == id).ToList();
+            List<Comment> comment = db.Comments.Where(x => x.ArticleID == id).OrderBy(x => x.DatePosted).ToList();
             List<CommentModel> commentModel = new List<CommentModel>();
             foreach(var item in comment)
             {
-                List<SubComment> subComment = db.SubComments.Where(x => x.CommentID == item.CommentID).ToList();
+                List<SubComment> subComment = db.SubComments.Where(x => x.CommentID == item.CommentID).OrderBy(x => x.DatePosted).ToList();
                 List<SubCommentModel> subCommentModel = new List<SubCommentModel>();
                 User user = new User();
                 string name;
+                string ProfilePicture;
                 foreach (var sub in subComment)
                 {
                     user = db.Users.Find(sub.UserID);
                     name = user.Name + " " + user.Surname;
+                    ProfilePicture = user.ProfilePicture;
 
                     subCommentModel.Add(new SubCommentModel
                     {
@@ -88,18 +146,21 @@ namespace Knowledgeable.Controllers
                         SubCommentID = sub.CommentID,
                         UpVote = sub.UpVote,
                         UserID = sub.UserID,
-                        userName = name
+                        userName = name,
+                        ProfilePicture = ProfilePicture
                     });
                 }
 
                 user = db.Users.Find(item.UserID);
                 name = user.Name + " " + user.Surname;
+                ProfilePicture = user.ProfilePicture;
 
                 commentModel.Add(new CommentModel
                 {
                     ArticleID = item.ArticleID,
                     UserID = item.UserID,
                     userName = name,
+                    ProfilePicture = ProfilePicture,
                     Comment1 = item.Comment1,
                     CommentID = item.CommentID,
                     DatePosted = item.DatePosted,

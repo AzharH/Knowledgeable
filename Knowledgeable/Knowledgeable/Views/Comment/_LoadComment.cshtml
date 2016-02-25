@@ -12,8 +12,8 @@
         border-radius:10px;
         padding-bottom:8px;
         padding-top:10px;
-        padding-right:5px;
-        padding-left:5px;
+        padding-right:15px;
+        padding-left:10px;
         margin-bottom:10px;
     }
 
@@ -23,9 +23,28 @@
         border-radius:10px;
         padding-bottom:5px;
         padding-top:5px;
-        padding-right:15px;
-        padding-left:5px;
+        padding-right:5px;
+        padding-left:10px;
         margin-bottom:10px;
+    }
+
+    .vote
+    {
+        color:blue;
+        cursor:pointer;
+    }
+
+    .vote:hover
+    {
+        color:blue;
+        text-decoration:underline;
+        cursor:pointer;
+    }
+
+    .vote:active
+    {
+        color:red;
+        cursor:pointer;
     }
 </style>
 
@@ -36,14 +55,26 @@
 @foreach (var item in Model)
 {
     <div id="comment" class="comment">
-        <p style="font-weight:bold;">@item.UserID</p>
+        <div style="width:8%; float:left;">
+            @if (item.ProfilePicture == null)
+            {
+                <img src="~/Content/ProfilePicture/default.jpg" style="width:100%;" alt="Profile Picture" />
+            }
+            else
+            {
+                <img src="~/Content/ProfilePicture/@item.ProfilePicture" alt="Profile Picture" />
+            }
+        </div>
 
-        <p>@item.Comment1</p>
+        <div style="width:90%; float:right;">
+            <p style="font-weight:bold;">@item.userName</p>
 
-        <p>@item.DatePosted | <span onclick="Upvote(@item.CommentID)">Upvote: </span> @item.UpVote | <span onclick="Downvote(@item.CommentID)">Downvote: </span> @item.DownVote </p>
+            <p>@item.Comment1</p>
 
-
-        <div class="reply" id="reply">
+            <p>@item.DatePosted | <span class="vote" onclick="UpvoteC('@item.CommentID')">Upvote: </span> @item.UpVote | <span class="vote" onclick="DownvoteC('@item.CommentID')">Downvote: </span> @item.DownVote </p>
+        </div>
+        
+        <div class="reply" id="reply" style="clear:both; padding-top:10px;">
             <textarea type="text" id="@item.CommentID" rows="3" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Reply to this comment"></textarea>
             <br /><br />
             <input type="button" value="Reply" onclick="SubmitS_Comment('@item.CommentID')" class="btn btn-default" />
@@ -56,11 +87,27 @@
             if (sub != null)
             { 
                 <div id="Subcomment" class="Subcomment">
-                    <h3>@sub.UserID</h3>
 
-                    <p>@sub.SubComment1</p>
+                    <div style="width:8%; float:left;">
+                        @if (sub.ProfilePicture == null)
+                        {
+                            <img src="~/Content/ProfilePicture/default.jpg" style="width:100%;" alt="Profile Picture" />
+                        }
+                        else
+                        {
+                            <img src="~/Content/ProfilePicture/@sub.ProfilePicture" alt="Profile Picture" />
+                        }
+                    </div>
 
-                    <p>@sub.DatePosted | <span onclick="Upvote(@sub.CommentID)">Upvote: </span> @sub.UpVote | <span onclick="Downvote(@sub.CommentID)">Downvote: </span> @sub.DownVote </p>
+                    <div style="width:90%; float:right;">
+                        <p style="font-weight:bold;">@sub.userName</p>
+
+                        <p>@sub.SubComment1</p>
+
+                        <p>@sub.DatePosted | <span class="vote" onclick="UpvoteSC('@sub.SubCommentID')">Upvote: </span> @sub.UpVote | <span class="vote" onclick="DownvoteSC('@sub.SubCommentID')">Downvote: </span> @sub.DownVote </p>
+                    </div>
+
+                    <div style="clear:both; width:100%;"></div>
                 </div>
             }
         }
@@ -69,15 +116,127 @@
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
 
+    function UpvoteC(id)
+    {
+        //alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/UpvoteC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Upvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function UpvoteSC(id)
+    {
+        //alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/UpvoteSC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Upvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function DownvoteC(id)
+    {
+        //alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/DownvoteC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Downvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function DownvoteSC(id)
+    {
+        //alert(id);
+        $.ajax({
+            type: "GET",
+            url: '/Comment/DownvoteSC',
+            data: { id: id},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                }
+                else {
+                    alert('Downvote Successful');
+                    reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
     function SubmitS_Comment(id) {
-        alert(id);
+        //alert(id);
         var comment = $('#' + id).val();
         SS_Comment(id, comment);
     }
 
     function SS_Comment(id, comment) {
-        alert(id);
-        alert(comment);
+        //alert(id);
+        //alert(comment);
         $.ajax({
             type: "GET",
             url: '/Comment/SS_Comment',
@@ -92,8 +251,33 @@
                 }
                 else {
                     alert('Subcomment has been posted');
-                    setTimeout(function () { location.reload(); }, 2000);
+                    reload();
                 }
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+                //var err = eval("(" + xhr.responseText + ")");
+                alert("error");
+            },
+        });
+    }
+
+    function reload()
+    {
+        $.ajax({
+            type: "GET",
+            url: '/Comment/LoadComment',
+            data: { id: articleid},
+            processdata: true,
+            cache: false,
+            contentType: "application/html",
+            dataType: "html",
+            success: function (data) {
+                //var JsonObj = $.parseJSON(data);
+                $("#comment").html(data);
+                document.getElementById('editButton').innerHTML = "Cancel";
+                document.getElementById('titleTop').innerHTML = "Edit";
+
             },
             error: function (xhr, status, error) {
                 //alert(xhr.responseText);
