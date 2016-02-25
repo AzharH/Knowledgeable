@@ -27,6 +27,25 @@ namespace Knowledgeable.Models
         public string ProfilePicture { get; set; }
     }
 
+    public class ProfileModel
+    {
+        public System.Guid UserID { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Surname { get; set; }
+
+        public string ProfilePicture { get; set; }
+        [Display(Name = "Articles posted")]
+        public int NumArticles { get; set; }
+        [Display(Name = "Shared Articles")]
+        public int NumShared { get; set; }
+    }
+
     public class LoginModel
     {
         public System.Guid UserID { get; set; }

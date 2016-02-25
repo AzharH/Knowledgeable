@@ -30,12 +30,23 @@ namespace Knowledgeable.Controllers
             {
                 user = db.Users.Find(id);
             }
-            UsersModel newUSer = new UsersModel();
-            newUSer.UserID = user.UserID;
-            newUSer.Surname = user.Surname;
-            newUSer.Name = user.Name;
-            newUSer.Email = user.Email;
-            return View(newUSer);
+            ProfileModel profile = new ProfileModel();
+            profile.UserID = user.UserID;
+            profile.Surname = user.Surname;
+            profile.Name = user.Name;
+            profile.Email = user.Email;
+            profile.ProfilePicture = user.ProfilePicture;
+
+            List<Article> article = db.Articles.Where(x => x.UserID == profile.UserID).ToList();
+            int countShare = 0;
+            foreach (var item in article)
+            {
+                List<Share> share = db.Shares.Where(x => x.ArticleID == item.ArticleID).ToList();
+                countShare = countShare + share.Count();
+            }
+            profile.NumArticles = article.Count();
+            profile.NumShared = countShare;
+            return View(profile);
 
         }
 

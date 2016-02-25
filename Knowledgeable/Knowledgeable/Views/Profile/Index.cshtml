@@ -1,41 +1,72 @@
-﻿@model Knowledgeable.Models.UsersModel
+﻿@model Knowledgeable.Models.ProfileModel
 
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>My Profile</h2>
+@if (Model.UserID.ToString() == User.Identity.Name)
+{
+    @Html.ActionLink("Edit My Profile","Edit",new { id=Model.UserID })
+}
 <hr />
+<div style="overflow:auto;">
+    <div style="width:200px; float:left;">
+        @if (Model.ProfilePicture == null)
+        {
+            <img src="~/Content/ProfilePicture/default.jpg" style="width:100%;" alt="Profile Picture" />
+        }
+        else
+        {
+            <img src="~/Content/ProfilePicture/@Model.ProfilePicture" alt="Profile Picture" />
+        }
+    </div>
 
-<div>
-    
-    <img src="" alt="Profile Picture" />
+    <div style="float:left;">
 
-    <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+        <dl class="dl-horizontal">
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Surname)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
 
-    </dl>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NumArticles)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumArticles)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NumShared)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumShared)
+            </dd>
+
+        </dl>
+    </div>
 </div>
