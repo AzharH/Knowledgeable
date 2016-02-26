@@ -3,49 +3,39 @@
     ViewBag.Title = "ViewArticle";
 }
 
-<h2>ViewArticle</h2>
+<h2>Article</h2>
+<hr />
 
 <div>
-    <h4>Article</h4>
-    <hr />
-    <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DatePosted)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DatePosted)
-        </dd>
+    <table width="100%" height="auto" border="0px">
+        <tr>
+            <th width="10%">@Html.DisplayNameFor(model => model.Title):</th>
+            <td>@Html.DisplayFor(model => model.Title)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.DatePosted):</th>
+            <td>@Html.DisplayFor(model => model.DatePosted)</td>
+        </tr>
         @if (Model.DateModified != null)
         {
-            <dt>
-                @Html.DisplayNameFor(model => model.DateModified)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.DateModified)
-            </dd>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.DateModified):</th>
+                <td>@Html.DisplayFor(model => model.DateModified)</td>
+            </tr>
         }
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Article1)
-        </dt>
-
-        <dd>
-            @Html.Raw(Model.Article1)
-        </dd>
-
-    </dl>
+        <tr><th colspan="6">&nbsp;</th></tr>
+        <tr><th>@Html.DisplayNameFor(model => model.Article1):</th></tr>
+        <tr>
+            <td colspan="6">
+                @Html.Raw(Model.Article1)
+            </td>
+        </tr>
+    </table>
+    <br/>
 </div>
+
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ArticleID }) |
     <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
@@ -57,10 +47,21 @@
 
 <br/>
 <div>
-    <textarea type="text" id="comment_" rows="5" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Write a comment..."></textarea>
+    <textarea class="txtarea" type="text" id="comment_" rows="5" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS';" placeholder="Write a comment..."></textarea>
     <br/><br/>
     <input type="button" value="Post a new comment" onclick="SubmitComment('@Model.ArticleID')" class="btn btn-default"/>
 </div>
+
+<style>
+    .txtarea
+    {
+        border-radius:5px;
+        background-color:#1a1a1a;
+        color: white;
+        border:none;
+    }
+</style>
+
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
 
@@ -70,8 +71,8 @@
     }
 
     function S_Comment(articleid, comment) {
-        alert(articleid);
-        alert(comment);
+        //alert(articleid);
+        //alert(comment);
         $.ajax({
             type: "GET",
             url: '/Comment/SComment',
@@ -86,6 +87,8 @@
                 }
                 else {
                     alert('Comment has been posted');
+                    document.getElementById('comment_').focus();
+                    document.getElementById('comment_').value = null;
                     reload();
                 }
             },

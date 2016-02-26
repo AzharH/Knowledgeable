@@ -1,31 +1,27 @@
 ﻿@model IEnumerable<Knowledgeable.Models.CommentModel>
 
 <style>
-    .Subcomment
-    {
-        margin-left: 20px;
-    }
-
     .comment
     {
-        background-color:gray;
-        border-radius:10px;
+        /*background-color:gray;
+        border-radius:10px;*/
         padding-bottom:8px;
         padding-top:10px;
         padding-right:15px;
         padding-left:10px;
-        margin-bottom:10px;
+        margin-bottom:30px;
     }
 
     .Subcomment
     {
-        background-color:lightgray;
-        border-radius:10px;
-        padding-bottom:5px;
-        padding-top:5px;
+        /*background-color:lightgray;
+        border-radius:10px;*/
+        padding-bottom:0px;
+        padding-top:0px;
         padding-right:5px;
-        padding-left:10px;
-        margin-bottom:10px;
+        padding-left:85px;
+        margin-bottom:8px;
+        margin-left: 20px;
     }
 
     .vote
@@ -46,6 +42,19 @@
         color:red;
         cursor:pointer;
     }
+
+    .pic
+    {
+        height:auto;
+        background-color:white;
+    }
+
+    .txtarea1
+    {
+        border-radius:5px;
+        background-color:#909090;
+        border:none;
+    }
 </style>
 
 <h3>Comments</h3>
@@ -55,7 +64,7 @@
 @foreach (var item in Model)
 {
     <div id="comment" class="comment">
-        <div style="width:8%; float:left;">
+        <div class="pic" style="width:7%; float:left;">
             @if (item.ProfilePicture == null)
             {
                 <img src="~/Content/ProfilePicture/default.jpg" style="width:100%;" alt="Profile Picture" />
@@ -66,21 +75,22 @@
             }
         </div>
 
-        <div style="width:90%; float:right;">
-            <p style="font-weight:bold;">@item.userName</p>
+        <div style="width:92%; float:right;">
+            <p style="font-weight:bold;">@item.userName <span style="font-weight:normal;"> | </span><span style="font-weight:normal; color: grey; font-size: 14px;">@item.DatePosted</span></p>
 
             <p>@item.Comment1</p>
 
-            <p>@item.DatePosted | <span class="vote" onclick="UpvoteC('@item.CommentID')">Upvote: </span> @item.UpVote | <span class="vote" onclick="DownvoteC('@item.CommentID')">Downvote: </span> @item.DownVote </p>
+            <p><span class="vote" onclick="UpvoteC('@item.CommentID')" style="font-size: 14px;">Upvote: @item.UpVote</span> | 
+                <span class="vote" onclick="DownvoteC('@item.CommentID')" style="font-size: 14px;">Downvote: @item.DownVote</span></p>
         </div>
         
         <div class="reply" id="reply" style="clear:both; padding-top:10px;">
-            <textarea type="text" id="@item.CommentID" rows="3" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" placeholder="Reply to this comment"></textarea>
+            <textarea class="txtarea1" type="text" id="@item.CommentID" rows="3" cols="500" style="padding-top:2px; padding-left:4px; font-family:'Trebuchet MS';" placeholder="Reply to this comment"></textarea>
             <br /><br />
-            <input type="button" value="Reply" onclick="SubmitS_Comment('@item.CommentID')" class="btn btn-default" />
+            <input type="button" value="Reply" onclick="SubmitS_Comment('@item.CommentID')" class="btn btn-default" /> <br/><br/>
         </div>
 
-        <hr />
+        
 
         @foreach (var sub in item.listSubcomment)
         {
@@ -88,7 +98,7 @@
             { 
                 <div id="Subcomment" class="Subcomment">
 
-                    <div style="width:8%; float:left;">
+                    <div class="pic" style="width:7%; float:left;">
                         @if (sub.ProfilePicture == null)
                         {
                             <img src="~/Content/ProfilePicture/default.jpg" style="width:100%;" alt="Profile Picture" />
@@ -99,12 +109,13 @@
                         }
                     </div>
 
-                    <div style="width:90%; float:right;">
-                        <p style="font-weight:bold;">@sub.userName</p>
+                    <div style="width:92%; float:right;">
+                        <p style="font-weight:bold;">@sub.userName <span style="font-weight:normal;"> | </span><span style="font-weight:normal; color: grey; font-size: 14px;">@sub.DatePosted</span></p>
 
                         <p>@sub.SubComment1</p>
 
-                        <p>@sub.DatePosted | <span class="vote" onclick="UpvoteSC('@sub.SubCommentID')">Upvote: </span> @sub.UpVote | <span class="vote" onclick="DownvoteSC('@sub.SubCommentID')">Downvote: </span> @sub.DownVote </p>
+                        <p><span class="vote" onclick="UpvoteSC('@sub.SubCommentID')" style="font-size: 14px;">Upvote:  @sub.UpVote</span> | 
+                            <span class="vote" onclick="DownvoteSC('@sub.SubCommentID')" style="font-size: 14px;">Downvote:  @sub.DownVote</span></p>
                     </div>
 
                     <div style="clear:both; width:100%;"></div>
@@ -113,6 +124,7 @@
         }
     </div>
 }
+
 <script src="~/Scripts/jquery-2.2.0.js"></script>
 <script>
 
