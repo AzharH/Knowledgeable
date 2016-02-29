@@ -119,7 +119,6 @@ namespace Knowledgeable.Controllers
                 listArticle = db.Articles.Where(x => x.UserID == UserID && x.CategoryID == id).ToList();
                 ViewBag.CategoryID = id;
             }
-
             List<ArticleModel> newListArticle = new List<ArticleModel>();
             foreach (var item in listArticle)
             {
@@ -198,19 +197,23 @@ namespace Knowledgeable.Controllers
 
         public ActionResult ViewArticle(Guid? id)
         {
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
-
-
                 Article article = db.Articles.Find(id);
                 ArticleModel newArticle = new ArticleModel();
+
+                User user = new User();
+                string name;
+                user = db.Users.Find(article.UserID);
+                name = user.Name + " " + user.Surname;
+
                 newArticle.Article1 = article.Article1;
                 newArticle.ArticleID = article.ArticleID;
+                newArticle.Owner = name;
                 Category category = db.Categories.Find(article.CategoryID);
                 newArticle.category = category.Name;
                 newArticle.CategoryID = article.CategoryID;

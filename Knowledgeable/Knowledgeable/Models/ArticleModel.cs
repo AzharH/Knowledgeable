@@ -12,6 +12,7 @@ namespace Knowledgeable.Models
     {
         public System.Guid ArticleID { get; set; }
         public System.Guid UserID { get; set; }
+        public string Owner { get; set; }
         public System.Guid CategoryID { get; set; }
         public string category { get; set; }
         public string Title { get; set; }

@@ -6,9 +6,14 @@
 <h2>Article</h2>
 <hr />
 
+
 <div>
 
     <table width="100%" height="auto" border="0px">
+        <tr>
+            <th width="10%">@Html.DisplayNameFor(model => model.Owner):</th>
+            <td>@Html.DisplayFor(model => model.Owner)</td>
+        </tr>
         <tr>
             <th width="10%">@Html.DisplayNameFor(model => model.Title):</th>
             <td>@Html.DisplayFor(model => model.Title)</td>
