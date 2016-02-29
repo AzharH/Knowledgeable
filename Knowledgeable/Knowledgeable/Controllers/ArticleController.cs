@@ -214,6 +214,7 @@ namespace Knowledgeable.Controllers
                 newArticle.Article1 = article.Article1;
                 newArticle.ArticleID = article.ArticleID;
                 newArticle.Owner = name;
+                newArticle.UserID = article.UserID;
                 Category category = db.Categories.Find(article.CategoryID);
                 newArticle.category = category.Name;
                 newArticle.CategoryID = article.CategoryID;

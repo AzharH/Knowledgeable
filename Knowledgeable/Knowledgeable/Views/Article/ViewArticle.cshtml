@@ -12,7 +12,7 @@
     <table width="100%" height="auto" border="0px">
         <tr>
             <th width="10%">@Html.DisplayNameFor(model => model.Owner):</th>
-            <td>@Html.DisplayFor(model => model.Owner)</td>
+            <td><span class="goToProf" onclick="location.href = '@(Url.Action("Index", "Profile", new { id = Model.UserID }))'">@Html.DisplayFor(model => model.Owner)</span></td>
         </tr>
         <tr>
             <th width="10%">@Html.DisplayNameFor(model => model.Title):</th>
@@ -64,6 +64,23 @@
         background-color:#1a1a1a;
         color: white;
         border:none;
+    }
+
+    .goToProf
+    {
+        color:blue;
+    }
+
+    .goToProf:hover
+    {
+        color:blue;
+        text-decoration:underline;
+    }
+
+    .goToProf:active
+    {
+        color:red;
+        text-decoration:none;
     }
 </style>
 
